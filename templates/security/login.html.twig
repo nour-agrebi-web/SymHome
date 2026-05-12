@@ -2,21 +2,219 @@
 
 {% block title %}Connexion - SymHome{% endblock %}
 
+{% block navbar %}{% endblock %}
+
+{% block stylesheets %}
+<style>
+    body {
+        background: #f6f3ef;
+        overflow-x: hidden;
+    }
+
+    .login-page {
+        min-height: 100vh;
+        padding: 45px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 1150px;
+        min-height: 580px;
+        background: #fff;
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .login-left {
+        background:
+            linear-gradient(135deg, rgba(69, 44, 29, 0.86), rgba(139, 94, 60, 0.78)),
+            url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        min-height: 580px;
+        padding: 60px 55px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .badge-home {
+        display: inline-block;
+        width: fit-content;
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 9px 18px;
+        border-radius: 999px;
+        margin-bottom: 26px;
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .login-left h1 {
+        font-size: 48px;
+        line-height: 1.12;
+        font-weight: 900;
+        margin-bottom: 22px;
+        max-width: 480px;
+    }
+
+    .login-left p {
+        font-size: 18px;
+        line-height: 1.6;
+        opacity: 0.95;
+        max-width: 480px;
+    }
+
+    .login-right {
+        min-height: 580px;
+        padding: 60px 65px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .login-right h2 {
+        font-size: 38px;
+        font-weight: 900;
+        color: #2b2118;
+        margin-bottom: 8px;
+    }
+
+    .login-right .subtitle {
+        color: #6f6257;
+        margin-bottom: 28px;
+        font-size: 17px;
+    }
+
+    .form-label {
+        font-weight: 800;
+        color: #3b2d23;
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+
+    .form-control {
+        height: 52px;
+        border-radius: 14px;
+        border: 1px solid #ddd4cb;
+        background: #fbfaf8;
+        font-size: 15px;
+        padding: 0 16px;
+    }
+
+    .form-control:focus {
+        border-color: #8b5e3c;
+        box-shadow: 0 0 0 0.2rem rgba(139, 94, 60, 0.16);
+    }
+
+    .form-check-label {
+        font-size: 15px;
+        color: #3b2d23;
+    }
+
+    .btn-login {
+        height: 52px;
+        border-radius: 999px;
+        background: #8b5e3c;
+        border: none;
+        color: white;
+        font-weight: 800;
+        font-size: 16px;
+        box-shadow: 0 10px 24px rgba(139, 94, 60, 0.24);
+    }
+
+    .btn-login:hover {
+        background: #70482d;
+        color: white;
+    }
+
+    .register-box {
+        background: #f3eee8;
+        border-radius: 14px;
+        padding: 16px;
+        text-align: center;
+        margin-top: 22px;
+        color: #5f5248;
+        font-size: 15px;
+    }
+
+    .register-box a {
+        color: #70482d;
+        font-weight: 900;
+        text-decoration: none;
+    }
+
+    .register-box a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 992px) {
+        .login-page {
+            padding: 20px;
+        }
+
+        .login-card {
+            min-height: auto;
+        }
+
+        .login-left {
+            min-height: 340px;
+            padding: 45px 32px;
+        }
+
+        .login-left h1 {
+            font-size: 36px;
+        }
+
+        .login-left p {
+            font-size: 16px;
+        }
+
+        .login-right {
+            min-height: auto;
+            padding: 42px 32px;
+        }
+
+        .login-right h2 {
+            font-size: 34px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<div class="login-page">
+    <div class="login-card">
+        <div class="row g-0">
 
-    <div class="row justify-content-center">
-        <div class="col-md-5">
+            <div class="col-lg-6">
+                <div class="login-left">
+                    <span class="badge-home">SymHome</span>
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">Connexion</h4>
+                    <h1>Meublez votre maison avec élégance</h1>
+
+                    <p>
+                        Connectez-vous pour découvrir nos meubles, gérer votre panier
+                        et suivre vos commandes en toute simplicité.
+                    </p>
                 </div>
+            </div>
 
-                <div class="card-body">
+            <div class="col-lg-6">
+                <div class="login-right">
+
+                    <h2>Espace client</h2>
+                    <p class="subtitle">Connectez-vous à votre compte SymHome</p>
 
                     {% for message in app.flashes('success') %}
-                        <div class="alert alert-success">{{ message }}</div>
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
                     {% endfor %}
 
                     {% if error %}
@@ -32,6 +230,7 @@
                                    value="{{ last_username }}"
                                    name="email"
                                    class="form-control"
+                                   placeholder="exemple@email.com"
                                    autocomplete="email"
                                    required
                                    autofocus>
@@ -42,11 +241,12 @@
                             <input type="password"
                                    name="password"
                                    class="form-control"
+                                   placeholder="Votre mot de passe"
                                    autocomplete="current-password"
                                    required>
                         </div>
 
-                        <div class="mb-3 form-check">
+                        <div class="mb-4 form-check">
                             <input type="checkbox" name="_remember_me" class="form-check-input" id="rememberMe">
                             <label class="form-check-label" for="rememberMe">
                                 Se souvenir de moi
@@ -55,15 +255,14 @@
 
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                        <button class="btn btn-primary w-100">
+                        <button class="btn btn-login w-100">
                             Se connecter
                         </button>
                     </form>
 
-                    <div class="text-center mt-3">
-                        <a href="{{ path('app_register') }}">
-                            Créer un compte
-                        </a>
+                    <div class="register-box">
+                        Vous n'avez pas encore de compte ?
+                        <a href="{{ path('app_register') }}">Créer un compte</a>
                     </div>
 
                 </div>
@@ -71,6 +270,5 @@
 
         </div>
     </div>
-
 </div>
 {% endblock %}
