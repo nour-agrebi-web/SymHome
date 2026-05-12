@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Meuble{% endblock %}
+
+{% block body %}
+    <h1>Meuble</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ meuble.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ meuble.nom }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ meuble.description }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ meuble.prix }}</td>
+            </tr>
+            <tr>
+                <th>Stock</th>
+                <td>{{ meuble.stock }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ meuble.image }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ meuble.createdAt ? meuble.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ meuble.updatedAt ? meuble.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_meuble_index') }}">back to list</a>
+
+    <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}">edit</a>
+
+    {{ include('meuble/_delete_form.html.twig') }}
+{% endblock %}

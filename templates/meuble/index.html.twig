@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Meuble index{% endblock %}
+
+{% block body %}
+    <h1>Meuble index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Image</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for meuble in meubles %}
+            <tr>
+                <td>{{ meuble.id }}</td>
+                <td>{{ meuble.nom }}</td>
+                <td>{{ meuble.description }}</td>
+                <td>{{ meuble.prix }}</td>
+                <td>{{ meuble.stock }}</td>
+                <td>{{ meuble.image }}</td>
+                <td>{{ meuble.createdAt ? meuble.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ meuble.updatedAt ? meuble.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_meuble_show', {'id': meuble.id}) }}">show</a>
+                    <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_meuble_new') }}">Create new</a>
+{% endblock %}
