@@ -20,19 +20,20 @@
 
                 <div class="collapse navbar-collapse" id="navbarSymHome">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_produit_index') }}">Produits</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_panier_index') }}">Panier</a>
-                        </li>
 
                         {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_produit_index') }}">Produits</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_panier_index') }}">Panier</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('app_commande_historique') }}">Mes commandes</a>
                             </li>
@@ -54,43 +55,6 @@
                             </li>
                         {% endif %}
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                Administration
-                            </a>
-
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_admin_dashboard') }}">
-                                        Dashboard
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_categorie_index') }}">
-                                        Catégories
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_meuble_index') }}">
-                                        Meubles
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_admin_commande_index') }}">
-                                        Commandes
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_admin_user_index') }}">
-                                        Utilisateurs
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
                     </ul>
                 </div>
             </div>

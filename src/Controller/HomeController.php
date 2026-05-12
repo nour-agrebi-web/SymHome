@@ -12,6 +12,10 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(MeubleRepository $meubleRepository): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $meubles = $meubleRepository->findAll();
 
         return $this->render('home/index.html.twig', [

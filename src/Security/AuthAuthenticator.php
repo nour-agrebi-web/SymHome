@@ -42,7 +42,7 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
 {
     if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
         return new RedirectResponse($targetPath);
@@ -50,6 +50,7 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token,
 
     return new RedirectResponse($this->urlGenerator->generate('app_home'));
 }
+
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
