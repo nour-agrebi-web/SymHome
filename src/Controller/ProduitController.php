@@ -25,4 +25,11 @@ final class ProduitController extends AbstractController
             'meuble' => $meuble,
         ]);
     }
+    #[Route('/produit/{id}', name: 'app_produit_show')]
+public function show(Meuble $meuble): Response
+{
+    return $this->render('produit/show.html.twig', [
+        'meuble' => $meuble,
+    ]);
+}
 }
