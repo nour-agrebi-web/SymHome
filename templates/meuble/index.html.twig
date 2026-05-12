@@ -1,47 +1,113 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Meuble index{% endblock %}
+{% block title %}Gestion des meubles{% endblock %}
 
 {% block body %}
-    <h1>Meuble index</h1>
+<div class="container mt-5">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>Prix</th>
-                <th>Stock</th>
-                <th>Image</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for meuble in meubles %}
-            <tr>
-                <td>{{ meuble.id }}</td>
-                <td>{{ meuble.nom }}</td>
-                <td>{{ meuble.description }}</td>
-                <td>{{ meuble.prix }}</td>
-                <td>{{ meuble.stock }}</td>
-                <td>{{ meuble.image }}</td>
-                <td>{{ meuble.createdAt ? meuble.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ meuble.updatedAt ? meuble.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_meuble_show', {'id': meuble.id}) }}">show</a>
-                    <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold">Gestion des meubles</h1>
+            <p class="text-muted">Liste des meubles disponibles dans le catalogue.</p>
+        </div>
 
-    <a href="{{ path('app_meuble_new') }}">Create new</a>
+        <a href="{{ path('app_meuble_new') }}" class="btn btn-primary">
+            Ajouter un meuble
+        </a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for meuble in meubles %}
+                    <tr>
+                        <td>{{ meuble.id }}</td>
+
+                        <td>
+                            {% if meuble.image %}
+                                <img src="{{ asset('uploads/meubles/' ~ meuble.image) }}"
+                                     alt="{{ meuble.nom }}"
+                                     style="width: 70px; height: 55px; object-fit: cover;"
+                                     class="rounded border">
+                            {% else %}
+                                <span class="text-muted">Aucune image</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <strong>{{ meuble.nom }}</strong>
+                            <br>
+                            <small class="text-muted">
+                                {% if meuble.description %}
+                                    {{ meuble.description|slice(0, 45) }}
+                                    {% if meuble.description|length > 45 %}...{% endif %}
+                                {% else %}
+                                    Aucune description
+                                {% endif %}
+                            </small>
+                        </td>
+
+                        <td>
+                            {% if meuble.categorie %}
+                                <span class="badge bg-secondary">{{ meuble.categorie.nom }}</span>
+                            {% else %}
+                                <span class="text-muted">Sans catégorie</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ meuble.prix }} DT</td>
+
+                        <td>
+                            {% if meuble.stock > 0 %}
+                                <span class="badge bg-success">{{ meuble.stock }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">Rupture</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-end">
+                            <a href="{{ path('app_meuble_show', {'id': meuble.id}) }}" class="btn btn-sm btn-info text-white">
+                                Voir
+                            </a>
+
+                            <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}" class="btn btn-sm btn-warning">
+                                Modifier
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            Aucun meuble trouvé.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary mt-3">
+        Retour aux catégories
+    </a>
+</div>
 {% endblock %}

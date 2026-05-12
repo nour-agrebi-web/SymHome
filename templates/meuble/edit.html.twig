@@ -1,13 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Meuble{% endblock %}
+{% block title %}Modifier un meuble{% endblock %}
 
 {% block body %}
-    <h1>Edit Meuble</h1>
+<div class="container mt-5">
 
-    {{ include('meuble/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-    <a href="{{ path('app_meuble_index') }}">back to list</a>
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">Modifier le meuble</h4>
+                </div>
 
-    {{ include('meuble/_delete_form.html.twig') }}
+                <div class="card-body">
+                    {{ include('meuble/_form.html.twig', {
+                        'button_label': 'Modifier'
+                    }) }}
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <a href="{{ path('app_meuble_index') }}" class="btn btn-outline-secondary">
+                    Retour à la liste
+                </a>
+
+                {{ include('meuble/_delete_form.html.twig') }}
+            </div>
+
+        </div>
+    </div>
+
+</div>
 {% endblock %}
