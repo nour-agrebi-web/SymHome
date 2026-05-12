@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\LigneCommandeRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LigneCommandeRepository::class)]
@@ -17,13 +16,18 @@ class LigneCommande
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private ?string $prixUnitaire = null;
 
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?string $sousTotal = null;
+
     #[ORM\ManyToOne(inversedBy: 'ligneCommandes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Commande $commande = null;
 
     #[ORM\ManyToOne(inversedBy: 'ligneCommandes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Meuble $meuble = null;
 
     public function getId(): ?int
@@ -39,7 +43,6 @@ class LigneCommande
     public function setQuantite(int $quantite): static
     {
         $this->quantite = $quantite;
-
         return $this;
     }
 
@@ -51,7 +54,17 @@ class LigneCommande
     public function setPrixUnitaire(string $prixUnitaire): static
     {
         $this->prixUnitaire = $prixUnitaire;
+        return $this;
+    }
 
+    public function getSousTotal(): ?string
+    {
+        return $this->sousTotal;
+    }
+
+    public function setSousTotal(string $sousTotal): static
+    {
+        $this->sousTotal = $sousTotal;
         return $this;
     }
 
@@ -63,7 +76,6 @@ class LigneCommande
     public function setCommande(?Commande $commande): static
     {
         $this->commande = $commande;
-
         return $this;
     }
 
@@ -75,7 +87,6 @@ class LigneCommande
     public function setMeuble(?Meuble $meuble): static
     {
         $this->meuble = $meuble;
-
         return $this;
     }
 }

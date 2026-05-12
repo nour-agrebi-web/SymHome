@@ -5,41 +5,53 @@ namespace App\Entity;
 use App\Repository\CommandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
 {
+    public const ETAT_EN_ATTENTE = 'en_attente';
+    public const ETAT_EN_COURS = 'en_cours';
+    public const ETAT_COMPLETEE = 'completee';
+    public const ETAT_ANNULEE = 'annulee';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $ref = null;
+    #[ORM\Column(length: 50, unique: true)]
+    private ?string $numero = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?string $total = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $adresseCom = null;
+    #[ORM\Column(length: 30)]
+    private ?string $etat = self::ETAT_EN_ATTENTE;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $prixCom = null;
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $modePaiement = null;
+
+    #[ORM\Column]
+    private ?bool $isPaid = false;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    /**
-     * @var Collection<int, LigneCommande>
-     */
-    #[ORM\OneToMany(targetEntity: LigneCommande::class, mappedBy: 'commande')]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneCommande::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $ligneCommandes;
 
     public function __construct()
     {
         $this->ligneCommandes = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->etat = self::ETAT_EN_ATTENTE;
+        $this->isPaid = false;
+        $this->modePaiement = 'carte_bancaire';
     }
 
     public function getId(): ?int
@@ -47,51 +59,69 @@ class Commande
         return $this->id;
     }
 
-    public function getRef(): ?string
+    public function getNumero(): ?string
     {
-        return $this->ref;
+        return $this->numero;
     }
 
-    public function setRef(string $ref): static
+    public function setNumero(string $numero): static
     {
-        $this->ref = $ref;
-
+        $this->numero = $numero;
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getTotal(): ?string
     {
-        return $this->status;
+        return $this->total;
     }
 
-    public function setStatus(string $status): static
+    public function setTotal(string $total): static
     {
-        $this->status = $status;
-
+        $this->total = $total;
         return $this;
     }
 
-    public function getAdresseCom(): ?string
+    public function getEtat(): ?string
     {
-        return $this->adresseCom;
+        return $this->etat;
     }
 
-    public function setAdresseCom(?string $adresseCom): static
+    public function setEtat(string $etat): static
     {
-        $this->adresseCom = $adresseCom;
-
+        $this->etat = $etat;
         return $this;
     }
 
-    public function getPrixCom(): ?string
+    public function getModePaiement(): ?string
     {
-        return $this->prixCom;
+        return $this->modePaiement;
     }
 
-    public function setPrixCom(string $prixCom): static
+    public function setModePaiement(?string $modePaiement): static
     {
-        $this->prixCom = $prixCom;
+        $this->modePaiement = $modePaiement;
+        return $this;
+    }
 
+    public function isPaid(): ?bool
+    {
+        return $this->isPaid;
+    }
+
+    public function setIsPaid(bool $isPaid): static
+    {
+        $this->isPaid = $isPaid;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 
@@ -103,13 +133,9 @@ class Commande
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, LigneCommande>
-     */
     public function getLigneCommandes(): Collection
     {
         return $this->ligneCommandes;
@@ -128,7 +154,6 @@ class Commande
     public function removeLigneCommande(LigneCommande $ligneCommande): static
     {
         if ($this->ligneCommandes->removeElement($ligneCommande)) {
-            // set the owning side to null (unless already changed)
             if ($ligneCommande->getCommande() === $this) {
                 $ligneCommande->setCommande(null);
             }

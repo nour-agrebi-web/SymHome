@@ -15,24 +15,27 @@ class Categorie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 100)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, Meuble>
-     */
-    #[ORM\OneToMany(targetEntity: Meuble::class, mappedBy: 'categorie')]
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Meuble::class, orphanRemoval: true)]
     private Collection $meubles;
 
     public function __construct()
     {
         $this->meubles = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function __toString(): string
+    {
+        return $this->nom ?? '';
     }
 
     public function getId(): ?int
@@ -45,22 +48,9 @@ class Categorie
         return $this->nom;
     }
 
-    public function setNom(?string $nom): static
+    public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
         return $this;
     }
 
@@ -69,16 +59,23 @@ class Categorie
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Meuble>
-     */
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
     public function getMeubles(): Collection
     {
         return $this->meubles;
@@ -97,7 +94,6 @@ class Categorie
     public function removeMeuble(Meuble $meuble): static
     {
         if ($this->meubles->removeElement($meuble)) {
-            // set the owning side to null (unless already changed)
             if ($meuble->getCategorie() === $this) {
                 $meuble->setCategorie(null);
             }
