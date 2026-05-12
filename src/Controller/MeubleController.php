@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/meuble')]
+#[Route('/admin/meuble')]
 final class MeubleController extends AbstractController
 {
     #[Route(name: 'app_meuble_index', methods: ['GET'])]
