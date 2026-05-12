@@ -2,59 +2,187 @@
 
 {% block title %}Accueil - SymHome{% endblock %}
 
+{% block stylesheets %}
+<style>
+    .home-hero {
+        background: linear-gradient(135deg, #f7f1eb, #ffffff);
+        border-radius: 26px;
+        padding: 70px 60px;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0e6dc;
+    }
+
+    .home-hero h1 {
+        color: #2b2118;
+        font-size: 48px;
+        font-weight: 900;
+    }
+
+    .home-hero p {
+        color: #6f6257;
+        font-size: 20px;
+        max-width: 760px;
+    }
+
+    .filter-card {
+        border: 1px solid #eadfd5;
+        border-radius: 18px;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+    }
+
+    .section-title {
+        color: #2b2118;
+        font-weight: 900;
+    }
+
+    .product-card {
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-img {
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .placeholder-img {
+        height: 220px;
+        background: #f4eee8;
+        color: #8b5e3c;
+    }
+
+    .price {
+        color: #8b5e3c;
+        font-weight: 900;
+    }
+
+    .btn-symhome {
+        background: #8b5e3c;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-symhome:hover {
+        background: #70482d;
+        color: #fff;
+    }
+
+    .btn-outline-symhome {
+        border: 1px solid #8b5e3c;
+        color: #8b5e3c;
+    }
+
+    .btn-outline-symhome:hover {
+        background: #8b5e3c;
+        color: #fff;
+    }
+
+    .badge-category {
+        background: #f3eee8;
+        color: #70482d;
+    }
+
+    @media (max-width: 768px) {
+        .home-hero {
+            padding: 45px 30px;
+        }
+
+        .home-hero h1 {
+            font-size: 34px;
+        }
+
+        .home-hero p {
+            font-size: 17px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mt-5">
 
-    <div class="p-5 mb-5 bg-light rounded-3 shadow-sm">
-        <div class="container-fluid py-4">
-            <h1 class="display-5 fw-bold">Bienvenue chez SymHome</h1>
-            <p class="col-md-8 fs-5">
-                Découvrez notre collection de meubles et décoration pour votre maison.
-            </p>
-
-            <a href="#produits" class="btn btn-primary btn-lg">
-                Voir les meubles
-            </a>
-        </div>
+    <div class="home-hero mb-5">
+        <h1>Bienvenue chez SymHome</h1>
+        <p class="mb-0">
+            Découvrez notre collection de meubles et décoration pour votre maison.
+        </p>
     </div>
 
     <section id="produits">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="fw-bold">Nos meubles</h2>
-                <p class="text-muted">Catalogue des meubles disponibles.</p>
-            </div>
+        <div class="mb-4">
+            <h2 class="section-title">Nos meubles</h2>
+            <p class="text-muted mb-0">Catalogue des meubles disponibles.</p>
+        </div>
 
-            <a href="{{ path('app_meuble_index') }}" class="btn btn-outline-dark">
-                Administration
-            </a>
+        <div class="card filter-card mb-4">
+            <div class="card-body">
+                <form method="get" action="{{ path('app_home') }}" class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label">Recherche par nom</label>
+                        <input type="text"
+                               name="search"
+                               value="{{ search }}"
+                               class="form-control"
+                               placeholder="Ex: canapé, chaise, bureau...">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Catégorie</label>
+                        <select name="categorie" class="form-select">
+                            <option value="">Toutes les catégories</option>
+
+                            {% for categorie in categories %}
+                                <option value="{{ categorie.id }}"
+                                    {% if categorieId == categorie.id %}selected{% endif %}>
+                                    {{ categorie.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-symhome w-100">
+                            Rechercher
+                        </button>
+
+                        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                            Reset
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="row">
             {% for meuble in meubles %}
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm product-card">
 
                         {% if meuble.image %}
                             <img src="{{ asset('uploads/meubles/' ~ meuble.image) }}"
-                                 class="card-img-top"
-                                 alt="{{ meuble.nom }}"
-                                 style="height: 220px; object-fit: cover;">
+                                 class="card-img-top product-img"
+                                 alt="{{ meuble.nom }}">
                         {% else %}
-                            <div class="bg-light d-flex align-items-center justify-content-center"
-                                 style="height: 220px;">
-                                <span class="text-muted">Aucune image</span>
+                            <div class="d-flex align-items-center justify-content-center placeholder-img">
+                                <span>Aucune image</span>
                             </div>
                         {% endif %}
 
                         <div class="card-body">
                             {% if meuble.categorie %}
-                                <span class="badge bg-secondary mb-2">
+                                <span class="badge badge-category mb-2">
                                     {{ meuble.categorie.nom }}
                                 </span>
                             {% endif %}
 
-                            <h5 class="card-title">{{ meuble.nom }}</h5>
+                            <h5 class="card-title fw-bold">{{ meuble.nom }}</h5>
 
                             <p class="card-text text-muted">
                                 {% if meuble.description %}
@@ -65,7 +193,7 @@
                                 {% endif %}
                             </p>
 
-                            <p class="fw-bold text-primary fs-5">
+                            <p class="fs-5 price">
                                 {{ meuble.prix }} DT
                             </p>
 
@@ -77,11 +205,11 @@
                         </div>
 
                         <div class="card-footer bg-white d-flex justify-content-between">
-                            <a href="{{ path('app_produit_show', {'id': meuble.id}) }}" class="btn btn-sm btn-outline-primary">
+                            <a href="{{ path('app_produit_show', {'id': meuble.id}) }}" class="btn btn-sm btn-outline-symhome">
                                 Voir détail
                             </a>
 
-                            <a href="{{ path('app_panier_ajouter', {'id': meuble.id}) }}" class="btn btn-sm btn-success">
+                            <a href="{{ path('app_panier_ajouter', {'id': meuble.id}) }}" class="btn btn-sm btn-symhome">
                                 Ajouter au panier
                             </a>
                         </div>
