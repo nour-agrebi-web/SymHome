@@ -1,29 +1,27 @@
 {% extends 'admin_base.html.twig' %}
+
 {% block title %}Ajouter un meuble{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
+<div class="row justify-content-center">
+    <div class="col-lg-8">
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Ajouter un meuble</h4>
-                </div>
-
-                <div class="card-body">
-                    {{ include('meuble/_form.html.twig', {
-                        'button_label': 'Ajouter'
-                    }) }}
-                </div>
+        <div class="admin-card">
+            <div class="admin-card-header">
+                Ajouter un meuble
             </div>
 
-            <a href="{{ path('app_meuble_index') }}" class="btn btn-outline-secondary mt-3">
-                Retour à la liste
-            </a>
+            <div class="admin-card-body">
+                {{ include('meuble/_form.html.twig', {
+                    'button_label': 'Ajouter'
+                }) }}
+            </div>
         </div>
-    </div>
 
+        <a href="{{ path('app_meuble_index') }}" class="btn btn-outline-secondary mt-3">
+            Retour à la liste
+        </a>
+
+    </div>
 </div>
 {% endblock %}

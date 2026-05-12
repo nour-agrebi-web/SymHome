@@ -3,28 +3,25 @@
 {% block title %}Ajouter une catégorie{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
+<div class="row justify-content-center">
+    <div class="col-lg-8">
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Ajouter une catégorie</h4>
-                </div>
-
-                <div class="card-body">
-                    {{ include('categorie/_form.html.twig', {
-                        'button_label': 'Ajouter'
-                    }) }}
-                </div>
+        <div class="admin-card">
+            <div class="admin-card-header">
+                Ajouter une catégorie
             </div>
 
-            <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary mt-3">
-                Retour à la liste
-            </a>
+            <div class="admin-card-body">
+                {{ include('categorie/_form.html.twig', {
+                    'button_label': 'Ajouter'
+                }) }}
+            </div>
         </div>
-    </div>
 
+        <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary mt-3">
+            Retour à la liste
+        </a>
+
+    </div>
 </div>
 {% endblock %}

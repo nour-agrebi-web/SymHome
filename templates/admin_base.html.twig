@@ -156,6 +156,53 @@
                     padding: 30px 20px;
                 }
             }
+            .form-control,
+.form-select {
+    border-radius: 12px;
+    border: 1px solid #ddd4cb;
+    padding: 12px 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #8b5e3c;
+    box-shadow: 0 0 0 0.2rem rgba(139, 94, 60, 0.15);
+}
+
+.btn-admin {
+    background: #8b5e3c;
+    border: none;
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 11px 20px;
+}
+
+.btn-admin:hover {
+    background: #70482d;
+    color: white;
+}
+          .btn-admin {
+    background: #8b5e3c;
+    border: none;
+    color: white;
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 11px 20px;
+}
+
+.btn-admin:hover {
+    background: #70482d;
+    color: white;
+}  
+.admin-empty {
+    background: #f3eee8;
+    color: #70482d;
+    border: 1px solid #eadfd5;
+    border-radius: 14px;
+    padding: 18px 22px;
+    font-weight: 600;
+}
         </style>
 
         {% block stylesheets %}{% endblock %}
@@ -175,8 +222,6 @@
                     <a href="{{ path('app_admin_commande_index') }}">Commandes</a>
                     <a href="{{ path('app_admin_user_index') }}">Utilisateurs</a>
 
-                    <a href="{{ path('app_home') }}">Retour au site</a>
-                    <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
                 </nav>
             </aside>
 
