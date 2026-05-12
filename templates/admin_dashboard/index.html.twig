@@ -1,20 +1,116 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminDashboardController!{% endblock %}
+{% block title %}Dashboard Admin - SymHome{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-5">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="mb-4">
+        <h1 class="fw-bold">Dashboard Admin</h1>
+        <p class="text-muted">Résumé simple de l'activité de SymHome.</p>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/SymHome/src/Controller/AdminDashboardController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/SymHome/templates/admin_dashboard/index.html.twig</code></li>
-    </ul>
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Clients</h6>
+                    <h2 class="fw-bold">{{ nombreClients }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Meubles</h6>
+                    <h2 class="fw-bold">{{ nombreMeubles }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Commandes</h6>
+                    <h2 class="fw-bold">{{ nombreCommandes }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Chiffre d'affaires</h6>
+                    <h2 class="fw-bold">{{ chiffreAffaires }} DT</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    Meuble le plus vendu
+                </div>
+                <div class="card-body">
+                    <h4 class="fw-bold">{{ meublePlusVendu }}</h4>
+                    <p class="text-muted mb-0">
+                        Produit avec la quantité vendue la plus élevée.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    État des commandes
+                </div>
+                <div class="card-body">
+                    <canvas id="commandesChart" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a href="{{ path('app_admin_commande_index') }}" class="btn btn-primary">
+            Voir commandes
+        </a>
+
+        <a href="{{ path('app_meuble_index') }}" class="btn btn-outline-dark">
+            Gérer meubles
+        </a>
+
+        <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-dark">
+            Gérer catégories
+        </a>
+    </div>
+
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('commandesChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['En attente', 'En cours', 'Complétées'],
+            datasets: [{
+                label: 'Nombre de commandes',
+                data: [
+                    {{ commandesEnAttente }},
+                    {{ commandesEnCours }},
+                    {{ commandesCompletees }}
+                ]
+            }]
+        }
+    });
+</script>
 {% endblock %}
