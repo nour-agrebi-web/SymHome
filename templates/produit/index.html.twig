@@ -1,20 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProduitController!{% endblock %}
+{% block title %}Produits - SymHome{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-5">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1 class="fw-bold mb-2">Nos produits</h1>
+    <p class="text-muted mb-4">Découvrez tous les meubles disponibles chez SymHome.</p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/SymHome/src/Controller/ProduitController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/SymHome/templates/produit/index.html.twig</code></li>
-    </ul>
+    <div class="row">
+        {% for meuble in meubles %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+
+                    {% if meuble.image %}
+                        <img src="{{ asset('uploads/meubles/' ~ meuble.image) }}"
+                             class="card-img-top"
+                             alt="{{ meuble.nom }}"
+                             style="height: 220px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center"
+                             style="height: 220px;">
+                            <span class="text-muted">Aucune image</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        {% if meuble.categorie %}
+                            <span class="badge bg-secondary mb-2">
+                                {{ meuble.categorie.nom }}
+                            </span>
+                        {% endif %}
+
+                        <h5 class="card-title">{{ meuble.nom }}</h5>
+
+                        <p class="card-text text-muted">
+                            {% if meuble.description %}
+                                {{ meuble.description|slice(0, 80) }}
+                                {% if meuble.description|length > 80 %}...{% endif %}
+                            {% else %}
+                                Aucune description
+                            {% endif %}
+                        </p>
+
+                        <p class="fw-bold text-primary fs-5">
+                            {{ meuble.prix }} DT
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-white d-flex justify-content-between">
+                        <a href="{{ path('app_produit_show', {'id': meuble.id}) }}" class="btn btn-sm btn-outline-primary">
+                            Voir détail
+                        </a>
+
+                        <a href="#" class="btn btn-sm btn-success">
+                            Ajouter au panier
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Aucun produit disponible pour le moment.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 </div>
 {% endblock %}
