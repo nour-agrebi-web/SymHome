@@ -1,20 +1,117 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PanierController!{% endblock %}
+{% block title %}Mon panier - SymHome{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-5">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1 class="fw-bold mb-2">Mon panier</h1>
+    <p class="text-muted mb-4">Gérez les meubles ajoutés à votre panier.</p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/SymHome/src/Controller/PanierController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/SymHome/templates/panier/index.html.twig</code></li>
-    </ul>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if items|length > 0 %}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Produit</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th>Sous-total</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    {% if item.meuble.image %}
+                                        <img src="{{ asset('uploads/meubles/' ~ item.meuble.image) }}"
+                                             alt="{{ item.meuble.nom }}"
+                                             style="width: 70px; height: 55px; object-fit: cover;"
+                                             class="rounded border">
+                                    {% endif %}
+
+                                    <div>
+                                        <strong>{{ item.meuble.nom }}</strong>
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ item.meuble.categorie.nom }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>{{ item.meuble.prix }} DT</td>
+
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="{{ path('app_panier_moins', {'id': item.meuble.id}) }}"
+                                       class="btn btn-sm btn-outline-secondary">-</a>
+
+                                    <span class="fw-bold">{{ item.quantite }}</span>
+
+                                    <a href="{{ path('app_panier_plus', {'id': item.meuble.id}) }}"
+                                       class="btn btn-sm btn-outline-secondary">+</a>
+                                </div>
+                            </td>
+
+                            <td>{{ item.sousTotal }} DT</td>
+
+                            <td class="text-end">
+                                <a href="{{ path('app_panier_supprimer', {'id': item.meuble.id}) }}"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Supprimer ce produit du panier ?')">
+                                    Supprimer
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="text-end">Total</th>
+                            <th>{{ total }} DT</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ path('app_produit_index') }}" class="btn btn-outline-primary">
+                        Continuer mes achats
+                    </a>
+
+                    <div>
+                        <a href="{{ path('app_panier_vider') }}" class="btn btn-outline-danger">
+                            Vider le panier
+                        </a>
+
+                        <a href="#" class="btn btn-success">
+                            Valider la commande
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Votre panier est vide.
+        </div>
+
+        <a href="{{ path('app_produit_index') }}" class="btn btn-primary">
+            Voir les produits
+        </a>
+    {% endif %}
+
 </div>
 {% endblock %}
