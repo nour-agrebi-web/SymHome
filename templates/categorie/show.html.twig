@@ -1,34 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Categorie{% endblock %}
+{% block title %}Détail catégorie{% endblock %}
 
 {% block body %}
-    <h1>Categorie</h1>
+<div class="container mt-5">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ categorie.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ categorie.nom }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ categorie.description }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ categorie.createdAt ? categorie.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Détail de la catégorie</h4>
+        </div>
 
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
+        <div class="card-body">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th style="width: 200px;">ID</th>
+                        <td>{{ categorie.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ categorie.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>
+                            {% if categorie.description %}
+                                {{ categorie.description }}
+                            {% else %}
+                                <span class="text-muted">Aucune description</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Date création</th>
+                        <td>
+                            {% if categorie.createdAt is defined and categorie.createdAt %}
+                                {{ categorie.createdAt|date('d/m/Y H:i') }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">edit</a>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary">
+                        Retour
+                    </a>
 
-    {{ include('categorie/_delete_form.html.twig') }}
+                    <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}" class="btn btn-warning">
+                        Modifier
+                    </a>
+                </div>
+
+                {{ include('categorie/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

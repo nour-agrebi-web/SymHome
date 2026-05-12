@@ -1,11 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Categorie{% endblock %}
+{% block title %}Ajouter une catégorie{% endblock %}
 
 {% block body %}
-    <h1>Create new Categorie</h1>
+<div class="container mt-5">
 
-    {{ include('categorie/_form.html.twig') }}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-    <a href="{{ path('app_categorie_index') }}">back to list</a>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Ajouter une catégorie</h4>
+                </div>
+
+                <div class="card-body">
+                    {{ include('categorie/_form.html.twig', {
+                        'button_label': 'Ajouter'
+                    }) }}
+                </div>
+            </div>
+
+            <a href="{{ path('app_categorie_index') }}" class="btn btn-outline-secondary mt-3">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
