@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin/meuble')]
 final class MeubleController extends AbstractController
 {
-    #[Route(name: 'app_meuble_index', methods: ['GET'])]
+    #[Route('/', name: 'app_meuble_index', methods: ['GET'])]
     public function index(MeubleRepository $meubleRepository): Response
     {
         return $this->render('meuble/index.html.twig', [
@@ -26,12 +26,19 @@ final class MeubleController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $meuble = new Meuble();
+
         $form = $this->createForm(MeubleType::class, $meuble);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (method_exists($meuble, 'setCreatedAt')) {
+                $meuble->setCreatedAt(new \DateTimeImmutable());
+            }
+
             $entityManager->persist($meuble);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Meuble ajouté avec succès.');
 
             return $this->redirectToRoute('app_meuble_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -57,7 +64,13 @@ final class MeubleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (method_exists($meuble, 'setUpdatedAt')) {
+                $meuble->setUpdatedAt(new \DateTimeImmutable());
+            }
+
             $entityManager->flush();
+
+            $this->addFlash('success', 'Meuble modifié avec succès.');
 
             return $this->redirectToRoute('app_meuble_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -71,9 +84,11 @@ final class MeubleController extends AbstractController
     #[Route('/{id}', name: 'app_meuble_delete', methods: ['POST'])]
     public function delete(Request $request, Meuble $meuble, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$meuble->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$meuble->getId(), $request->request->get('_token'))) {
             $entityManager->remove($meuble);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Meuble supprimé avec succès.');
         }
 
         return $this->redirectToRoute('app_meuble_index', [], Response::HTTP_SEE_OTHER);
