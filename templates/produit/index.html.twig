@@ -8,6 +8,45 @@
     <h1 class="fw-bold mb-2">Nos produits</h1>
     <p class="text-muted mb-4">Découvrez tous les meubles disponibles chez SymHome.</p>
 
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" action="{{ path('app_produit_index') }}" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label">Recherche par nom</label>
+                    <input type="text"
+                           name="search"
+                           value="{{ search }}"
+                           class="form-control"
+                           placeholder="Ex: canapé, chaise, bureau...">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Catégorie</label>
+                    <select name="categorie" class="form-select">
+                        <option value="">Toutes les catégories</option>
+
+                        {% for categorie in categories %}
+                            <option value="{{ categorie.id }}"
+                                {% if categorieId == categorie.id %}selected{% endif %}>
+                                {{ categorie.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Rechercher
+                    </button>
+
+                    <a href="{{ path('app_produit_index') }}" class="btn btn-outline-secondary">
+                        Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
         {% for meuble in meubles %}
             <div class="col-md-4 mb-4">
@@ -46,6 +85,12 @@
                         <p class="fw-bold text-primary fs-5">
                             {{ meuble.prix }} DT
                         </p>
+
+                        {% if meuble.stock > 0 %}
+                            <span class="badge bg-success">En stock: {{ meuble.stock }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">Rupture de stock</span>
+                        {% endif %}
                     </div>
 
                     <div class="card-footer bg-white d-flex justify-content-between">
@@ -62,8 +107,8 @@
             </div>
         {% else %}
             <div class="col-12">
-                <div class="alert alert-info">
-                    Aucun produit disponible pour le moment.
+                <div class="alert alert-warning">
+                    Aucun produit trouvé.
                 </div>
             </div>
         {% endfor %}
