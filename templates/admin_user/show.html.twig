@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail utilisateur - SymHome{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    <a href="{{ path('app_admin_user_index') }}" class="btn btn-outline-secondary mb-4">
+        Retour utilisateurs
+    </a>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            Détail utilisateur
+        </div>
+
+        <div class="card-body">
+            <p><strong>ID :</strong> {{ user.id }}</p>
+            <p><strong>Nom :</strong> {{ user.nom }}</p>
+            <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+            <p><strong>Email :</strong> {{ user.email }}</p>
+            <p><strong>Téléphone :</strong> {{ user.telephone ?: '-' }}</p>
+            <p><strong>Adresse :</strong> {{ user.adresse ?: '-' }}</p>
+
+            <p>
+                <strong>Rôles :</strong>
+                {% for role in user.roles %}
+                    <span class="badge bg-secondary">{{ role }}</span>
+                {% endfor %}
+            </p>
+
+            <form method="post"
+                  action="{{ path('app_admin_user_delete', {'id': user.id}) }}"
+                  onsubmit="return confirm('Supprimer cet utilisateur ?');">
+
+                <button class="btn btn-danger">
+                    Supprimer utilisateur
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
