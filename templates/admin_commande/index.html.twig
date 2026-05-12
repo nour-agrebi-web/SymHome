@@ -1,20 +1,111 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminCommandeController!{% endblock %}
+{% block title %}Administration des commandes{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-5">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold">Suivi des commandes</h1>
+            <p class="text-muted">Consulter et suivre les commandes des clients.</p>
+        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/SymHome/src/Controller/AdminCommandeController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/SymHome/templates/admin_commande/index.html.twig</code></li>
-    </ul>
+        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+            Retour accueil
+        </a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if commandes|length > 0 %}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Numéro</th>
+                            <th>Client</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>État</th>
+                            <th>Paiement</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for commande in commandes %}
+                            <tr>
+                                <td>
+                                    <strong>{{ commande.numero }}</strong>
+                                </td>
+
+                                <td>
+                                    {% if commande.user %}
+                                        {{ commande.user.nom }} {{ commande.user.prenom }}
+                                        <br>
+                                        <small class="text-muted">{{ commande.user.email }}</small>
+                                    {% else %}
+                                        <span class="text-muted">Client supprimé</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ commande.createdAt|date('d/m/Y H:i') }}</td>
+
+                                <td>
+                                    <strong>{{ commande.total }} DT</strong>
+                                </td>
+
+                                <td>
+                                    {% if commande.etat == 'en_attente' %}
+                                        <span class="badge bg-warning text-dark">En attente</span>
+                                    {% elseif commande.etat == 'en_cours' %}
+                                        <span class="badge bg-info text-dark">En cours</span>
+                                    {% elseif commande.etat == 'completee' %}
+                                        <span class="badge bg-success">Complétée</span>
+                                    {% elseif commande.etat == 'annulee' %}
+                                        <span class="badge bg-danger">Annulée</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ commande.etat }}</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if commande.isPaid %}
+                                        <span class="badge bg-success">Payée</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Non payée</span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="text-end">
+                                    <a href="{{ path('app_admin_commande_show', {'id': commande.id}) }}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Détails
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Aucune commande trouvée.
+        </div>
+    {% endif %}
+
 </div>
 {% endblock %}
