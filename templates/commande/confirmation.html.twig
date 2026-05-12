@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation commande - SymHome{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    <div class="alert alert-success shadow-sm">
+        <h1 class="fw-bold">Commande confirmée</h1>
+        <p class="mb-0">
+            Votre commande a été validée avec succès.
+        </p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            Récapitulatif de la commande
+        </div>
+
+        <div class="card-body">
+            <p>
+                <strong>Numéro commande :</strong>
+                {{ commande.numero }}
+            </p>
+
+            <p>
+                <strong>Date :</strong>
+                {{ commande.createdAt|date('d/m/Y H:i') }}
+            </p>
+
+            <p>
+                <strong>État :</strong>
+                <span class="badge bg-warning text-dark">{{ commande.etat }}</span>
+            </p>
+
+            <p>
+                <strong>Paiement :</strong>
+                {% if commande.isPaid %}
+                    <span class="badge bg-success">Payée</span>
+                {% else %}
+                    <span class="badge bg-danger">Non payée</span>
+                {% endif %}
+            </p>
+
+            <hr>
+
+            <h4 class="mb-3">Produits commandés</h4>
+
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for ligne in commande.ligneCommandes %}
+                        <tr>
+                            <td>{{ ligne.meuble.nom }}</td>
+                            <td>{{ ligne.prixUnitaire }} DT</td>
+                            <td>{{ ligne.quantite }}</td>
+                            <td>{{ ligne.sousTotal }} DT</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th colspan="3" class="text-end">Total</th>
+                        <th>{{ commande.total }} DT</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="d-flex gap-2 mt-4">
+                <a href="{{ path('app_home') }}" class="btn btn-primary">
+                    Retour à l'accueil
+                </a>
+
+                <a href="{{ path('app_commande_historique') }}" class="btn btn-outline-dark">
+                    Mes commandes
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

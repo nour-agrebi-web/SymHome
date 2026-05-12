@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail commande - SymHome{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+
+    <a href="{{ path('app_commande_historique') }}" class="btn btn-outline-secondary mb-4">
+        Retour aux commandes
+    </a>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Détail commande {{ commande.numero }}</h4>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <p><strong>Numéro :</strong> {{ commande.numero }}</p>
+                    <p><strong>Date :</strong> {{ commande.createdAt|date('d/m/Y H:i') }}</p>
+                    <p><strong>Client :</strong> {{ commande.user.nom }} {{ commande.user.prenom }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>Total :</strong> {{ commande.total }} DT</p>
+                    <p><strong>État :</strong> {{ commande.etat }}</p>
+                    <p>
+                        <strong>Paiement :</strong>
+                        {% if commande.isPaid %}
+                            <span class="badge bg-success">Payée</span>
+                        {% else %}
+                            <span class="badge bg-danger">Non payée</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <h4 class="mb-3">Produits</h4>
+
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Produit</th>
+                        <th>Catégorie</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for ligne in commande.ligneCommandes %}
+                        <tr>
+                            <td>{{ ligne.meuble.nom }}</td>
+                            <td>
+                                {% if ligne.meuble.categorie %}
+                                    {{ ligne.meuble.categorie.nom }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ ligne.prixUnitaire }} DT</td>
+                            <td>{{ ligne.quantite }}</td>
+                            <td>{{ ligne.sousTotal }} DT</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th colspan="4" class="text-end">Total</th>
+                        <th>{{ commande.total }} DT</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
