@@ -1,20 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!{% endblock %}
+{% block title %}Mon compte - SymHome{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container mt-5">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1 class="fw-bold mb-4">Mon espace client</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/SymHome/src/Controller/ProfileController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/SymHome/templates/profile/index.html.twig</code></li>
-    </ul>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            Informations personnelles
+        </div>
+
+        <div class="card-body">
+            <p><strong>Nom :</strong> {{ app.user.nom }}</p>
+            <p><strong>Prénom :</strong> {{ app.user.prenom }}</p>
+            <p><strong>Email :</strong> {{ app.user.email }}</p>
+            <p><strong>Téléphone :</strong> {{ app.user.telephone ?: '-' }}</p>
+            <p><strong>Adresse :</strong> {{ app.user.adresse ?: '-' }}</p>
+
+            <div class="d-flex gap-2 mt-4">
+                <a href="{{ path('app_commande_historique') }}" class="btn btn-outline-primary">
+                    Mes commandes
+                </a>
+
+                <a href="{{ path('app_logout') }}" class="btn btn-danger">
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
