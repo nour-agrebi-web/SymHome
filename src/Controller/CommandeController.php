@@ -4,16 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Commande;
 use App\Entity\LigneCommande;
-use App\Entity\User;
 use App\Repository\CommandeRepository;
 use App\Repository\MeubleRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class CommandeController extends AbstractController
@@ -24,12 +21,10 @@ final class CommandeController extends AbstractController
     }
 
     #[Route('/commande/checkout', name: 'app_commande_checkout')]
-    public function checkout(
-        MeubleRepository $meubleRepository,
-        UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
-    ): RedirectResponse {
+   public function checkout(
+    MeubleRepository $meubleRepository,
+    EntityManagerInterface $entityManager
+): RedirectResponse {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -38,27 +33,12 @@ final class CommandeController extends AbstractController
             return $this->redirectToRoute('app_panier_index');
         }
 
-        /*
-         * Version temporaire sans login/register:
-         * On utilise un client demo pour pouvoir tester les commandes.
-         * Après, quand tu fais login/register, on remplace cette partie par $this->getUser().
-         */
-        $user = $userRepository->findOneBy(['email' => 'client@symhome.com']);
+       
+      $user = $this->getUser();
 
         if (!$user) {
-            $user = new User();
-            $user->setEmail('client@symhome.com');
-            $user->setRoles(['ROLE_USER']);
-            $user->setNom('Client');
-            $user->setPrenom('Demo');
-            $user->setTelephone('00000000');
-            $user->setAdresse('Adresse demo');
-            $user->setIsVerified(true);
-
-            $hashedPassword = $passwordHasher->hashPassword($user, 'client123');
-            $user->setPassword($hashedPassword);
-
-            $entityManager->persist($user);
+            $this->addFlash('danger', 'Vous devez vous connecter pour valider une commande.');
+            return $this->redirectToRoute('app_login');
         }
 
         $commande = new Commande();
@@ -122,23 +102,32 @@ final class CommandeController extends AbstractController
     #[Route('/mes-commandes', name: 'app_commande_historique')]
     public function historique(CommandeRepository $commandeRepository): Response
     {
-        /*
-         * Version temporaire:
-         * On affiche toutes les commandes.
-         * Après login/register, on filtrera par user connecté.
-         */
-        $commandes = $commandeRepository->findBy([], [
-            'id' => 'DESC',
-        ]);
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $commandes = $commandeRepository->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
 
         return $this->render('commande/historique.html.twig', [
             'commandes' => $commandes,
         ]);
     }
-
-    #[Route('/mes-commandes/{id}', name: 'app_commande_detail')]
+#[Route('/mes-commandes/{id}', name: 'app_commande_detail')]
     public function detail(Commande $commande): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($commande->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         return $this->render('commande/detail.html.twig', [
             'commande' => $commande,
         ]);
