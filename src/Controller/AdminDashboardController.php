@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\CommandeRepository;
-use App\Repository\LigneCommandeRepository;
 use App\Repository\MeubleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +18,6 @@ final class AdminDashboardController extends AbstractController
         UserRepository $userRepository,
         MeubleRepository $meubleRepository,
         CommandeRepository $commandeRepository,
-        LigneCommandeRepository $ligneCommandeRepository,
         EntityManagerInterface $entityManager
     ): Response {
         $nombreClients = count($userRepository->findAll());
@@ -30,8 +28,8 @@ final class AdminDashboardController extends AbstractController
 
         $chiffreAffaires = 0;
         $commandesEnAttente = 0;
-        $commandesEnCours = 0;
-        $commandesCompletees = 0;
+        $commandesConfirmees = 0;
+        $commandesAnnulees = 0;
 
         foreach ($commandes as $commande) {
             if ($commande->isPaid()) {
@@ -40,10 +38,10 @@ final class AdminDashboardController extends AbstractController
 
             if ($commande->getEtat() === 'en_attente') {
                 $commandesEnAttente++;
-            } elseif ($commande->getEtat() === 'en_cours') {
-                $commandesEnCours++;
-            } elseif ($commande->getEtat() === 'completee') {
-                $commandesCompletees++;
+            } elseif ($commande->getEtat() === 'confirmee') {
+                $commandesConfirmees++;
+            } elseif ($commande->getEtat() === 'annulee') {
+                $commandesAnnulees++;
             }
         }
 
@@ -66,8 +64,8 @@ final class AdminDashboardController extends AbstractController
             'chiffreAffaires' => $chiffreAffaires,
             'meublePlusVendu' => $meublePlusVendu,
             'commandesEnAttente' => $commandesEnAttente,
-            'commandesEnCours' => $commandesEnCours,
-            'commandesCompletees' => $commandesCompletees,
+            'commandesConfirmees' => $commandesConfirmees,
+            'commandesAnnulees' => $commandesAnnulees,
         ]);
     }
 }

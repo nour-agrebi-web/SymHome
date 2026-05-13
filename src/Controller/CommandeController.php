@@ -9,6 +9,7 @@ use App\Repository\MeubleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,11 +21,9 @@ final class CommandeController extends AbstractController
     ) {
     }
 
-    #[Route('/commande/checkout', name: 'app_commande_checkout')]
-   public function checkout(
-    MeubleRepository $meubleRepository,
-    EntityManagerInterface $entityManager
-): RedirectResponse {
+    #[Route('/commande/paiement', name: 'app_commande_paiement', methods: ['GET', 'POST'])]
+    public function paiement(Request $request, MeubleRepository $meubleRepository): Response
+    {
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -33,8 +32,57 @@ final class CommandeController extends AbstractController
             return $this->redirectToRoute('app_panier_index');
         }
 
-       
-      $user = $this->getUser();
+        if (!$this->getUser()) {
+            $this->addFlash('danger', 'Vous devez vous connecter pour payer votre commande.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $total = 0;
+
+        foreach ($panier as $meubleId => $quantite) {
+            $meuble = $meubleRepository->find($meubleId);
+
+            if ($meuble) {
+                $total += (float) $meuble->getPrix() * $quantite;
+            }
+        }
+
+        if ($request->isMethod('POST')) {
+            $numeroCarte = trim((string) $request->request->get('numero_carte'));
+
+            if (!ctype_digit($numeroCarte) || strlen($numeroCarte) !== 13) {
+                $this->addFlash('danger', 'Le numéro de carte doit contenir exactement 13 chiffres.');
+                return $this->redirectToRoute('app_commande_paiement');
+            }
+
+            $session->set('paiement_valide', true);
+
+            return $this->redirectToRoute('app_commande_checkout');
+        }
+
+        return $this->render('commande/paiement.html.twig', [
+            'total' => $total,
+        ]);
+    }
+
+    #[Route('/commande/checkout', name: 'app_commande_checkout')]
+    public function checkout(
+        MeubleRepository $meubleRepository,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse {
+        $session = $this->requestStack->getSession();
+        $panier = $session->get('panier', []);
+
+        if (empty($panier)) {
+            $this->addFlash('danger', 'Votre panier est vide.');
+            return $this->redirectToRoute('app_panier_index');
+        }
+
+        if (!$session->get('paiement_valide')) {
+            return $this->redirectToRoute('app_commande_paiement');
+        }
+
+        $user = $this->getUser();
 
         if (!$user) {
             $this->addFlash('danger', 'Vous devez vous connecter pour valider une commande.');
@@ -45,7 +93,7 @@ final class CommandeController extends AbstractController
         $commande->setUser($user);
         $commande->setNumero('CMD-' . date('YmdHis') . '-' . random_int(100, 999));
         $commande->setEtat(Commande::ETAT_EN_ATTENTE);
-        $commande->setModePaiement('paiement_simule');
+        $commande->setModePaiement('carte_bancaire');
         $commande->setIsPaid(true);
 
         $total = 0;
@@ -83,6 +131,7 @@ final class CommandeController extends AbstractController
         $entityManager->flush();
 
         $session->remove('panier');
+        $session->remove('paiement_valide');
 
         $this->addFlash('success', 'Commande validée avec succès.');
 
@@ -94,6 +143,14 @@ final class CommandeController extends AbstractController
     #[Route('/commande/confirmation/{id}', name: 'app_commande_confirmation')]
     public function confirmation(Commande $commande): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($commande->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         return $this->render('commande/confirmation.html.twig', [
             'commande' => $commande,
         ]);
@@ -117,7 +174,8 @@ final class CommandeController extends AbstractController
             'commandes' => $commandes,
         ]);
     }
-#[Route('/mes-commandes/{id}', name: 'app_commande_detail')]
+
+    #[Route('/mes-commandes/{id}', name: 'app_commande_detail')]
     public function detail(Commande $commande): Response
     {
         if (!$this->getUser()) {

@@ -40,10 +40,10 @@
                                 <td>
                                     {% if commande.etat == 'en_attente' %}
                                         <span class="badge bg-warning text-dark">En attente</span>
-                                    {% elseif commande.etat == 'en_cours' %}
-                                        <span class="badge bg-info text-dark">En cours</span>
-                                    {% elseif commande.etat == 'completee' %}
-                                        <span class="badge bg-success">Complétée</span>
+                                    {% elseif commande.etat == 'confirmee' %}
+                                        <span class="badge bg-success">Confirmée</span>
+                                    {% elseif commande.etat == 'annulee' %}
+                                        <span class="badge bg-danger">Annulée</span>
                                     {% else %}
                                         <span class="badge bg-secondary">{{ commande.etat }}</span>
                                     {% endif %}

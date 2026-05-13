@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - SymHome{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .payment-card {
+        max-width: 650px;
+        margin: 60px auto;
+        border: none;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+    }
+
+    .payment-header {
+        background: #70482d;
+        color: white;
+        padding: 24px;
+    }
+
+    .payment-body {
+        padding: 30px;
+    }
+
+    .total-box {
+        background: #f3eee8;
+        color: #70482d;
+        border-radius: 14px;
+        padding: 18px;
+        font-weight: 800;
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+
+    .btn-pay {
+        background: #8b5e3c;
+        border: none;
+        color: white;
+        font-weight: 700;
+        border-radius: 12px;
+        padding: 12px 20px;
+    }
+
+    .btn-pay:hover {
+        background: #70482d;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    <div class="card payment-card">
+        <div class="payment-header">
+            <h3 class="mb-0">Paiement sécurisé</h3>
+        </div>
+
+        <div class="payment-body">
+
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <div class="total-box">
+                Total à payer : {{ total }} DT
+            </div>
+
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Numéro de carte</label>
+                    <input type="text"
+                           name="numero_carte"
+                           class="form-control"
+                           placeholder="Ex: 1234567890123"
+                           maxlength="13"
+                           required>
+                    <small class="text-muted">
+                        Le numéro doit contenir exactement 13 chiffres.
+                    </small>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ path('app_panier_index') }}" class="btn btn-outline-secondary">
+                        Retour au panier
+                    </a>
+
+                    <button class="btn btn-pay">
+                        Payer et confirmer
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

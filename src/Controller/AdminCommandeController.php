@@ -49,10 +49,9 @@ final class AdminCommandeController extends AbstractController
 
         $etat = $request->request->get('etat');
 
-        $etatsAutorises = [
+            $etatsAutorises = [
             Commande::ETAT_EN_ATTENTE,
-            Commande::ETAT_EN_COURS,
-            Commande::ETAT_COMPLETEE,
+            Commande::ETAT_CONFIRMEE,
             Commande::ETAT_ANNULEE,
         ];
 

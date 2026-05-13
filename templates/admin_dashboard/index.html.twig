@@ -71,23 +71,27 @@
 {% block javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     const ctx = document.getElementById('commandesChart');
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['En attente', 'En cours', 'Complétées'],
+            labels: ['En attente', 'Confirmées', 'Annulées'],
             datasets: [{
                 label: 'Nombre de commandes',
                 data: [
                     {{ commandesEnAttente }},
-                    {{ commandesEnCours }},
-                    {{ commandesCompletees }}
+                    {{ commandesConfirmees }},
+                    {{ commandesAnnulees }}
                 ],
                 backgroundColor: '#8b5e3c'
             }]
         }
     });
 </script>
+{% endblock %}
 {% endblock %}

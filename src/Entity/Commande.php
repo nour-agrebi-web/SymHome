@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Commande
 {
     public const ETAT_EN_ATTENTE = 'en_attente';
-    public const ETAT_EN_COURS = 'en_cours';
-    public const ETAT_COMPLETEE = 'completee';
+    public const ETAT_CONFIRMEE = 'confirmee';
     public const ETAT_ANNULEE = 'annulee';
 
     #[ORM\Id]
