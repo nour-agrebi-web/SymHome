@@ -68,5 +68,4 @@ final class AdminDashboardController extends AbstractController
             'commandesAnnulees' => $commandesAnnulees,
         ]);
     }
-    
 }

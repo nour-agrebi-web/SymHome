@@ -37,7 +37,6 @@ final class MeubleController extends AbstractController
 
             $entityManager->persist($meuble);
             $entityManager->flush();
-
             $this->addFlash('success', 'Meuble ajouté avec succès.');
 
             return $this->redirectToRoute('app_meuble_index', [], Response::HTTP_SEE_OTHER);
