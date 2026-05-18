@@ -98,6 +98,16 @@
                 background: #f3eee8;
                 color: #70482d;
             }
+
+            .auth-link {
+                display: flex !important;
+                align-items: center;
+                gap: 7px;
+            }
+
+            .auth-link i {
+                font-size: 22px;
+            }
         </style>
 
         {% block stylesheets %}{% endblock %}
@@ -112,19 +122,21 @@
                         <span>DU MONDE</span>
                     </a>
 
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSymHome">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSymHome" aria-controls="navbarSymHome" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSymHome">
                         <ul class="navbar-nav ms-auto">
 
+                            {# Accueil visible pour tout le monde #}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_home') }}">
+                                    Accueil
+                                </a>
+                            </li>
+
                             {% if app.user %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('app_home') }}">
-                                        Accueil
-                                    </a>
-                                </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ path('app_commande_historique') }}">
@@ -173,22 +185,23 @@
                                         <i class="bi bi-bag"></i>
                                     </a>
                                 </li>
+
                             {% else %}
+
                                 <li class="nav-item">
-                                    <a class="nav-link account-link" href="{{ path('app_login') }}">
+                                    <a class="nav-link auth-link" href="{{ path('app_login') }}">
                                         <i class="bi bi-person"></i>
-                                        <span>
-                                            <small>Mon compte</small>
-                                            Me connecter
-                                        </span>
+                                        Connexion
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('app_register') }}">
+                                    <a class="nav-link auth-link" href="{{ path('app_register') }}">
+                                        <i class="bi bi-person-plus"></i>
                                         Inscription
                                     </a>
                                 </li>
+
                             {% endif %}
 
                         </ul>

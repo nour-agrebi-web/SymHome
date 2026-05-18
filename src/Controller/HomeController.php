@@ -11,16 +11,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+   #[Route('/', name: 'app_home')]
     public function index(
         Request $request,
         MeubleRepository $meubleRepository,
         CategorieRepository $categorieRepository
     ): Response {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
         $search = $request->query->get('search');
         $categorieId = $request->query->get('categorie');
 
