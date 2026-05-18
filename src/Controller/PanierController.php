@@ -21,6 +21,11 @@ final class PanierController extends AbstractController
     #[Route('/panier', name: 'app_panier_index')]
     public function index(MeubleRepository $meubleRepository): Response
     {
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez vous connecter pour consulter votre panier.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -52,6 +57,11 @@ final class PanierController extends AbstractController
     #[Route('/panier/ajouter/{id}', name: 'app_panier_ajouter')]
     public function ajouter(int $id): RedirectResponse
     {
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez vous connecter pour ajouter un produit au panier.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -71,6 +81,11 @@ final class PanierController extends AbstractController
     #[Route('/panier/plus/{id}', name: 'app_panier_plus')]
     public function plus(int $id): RedirectResponse
     {
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez vous connecter pour modifier votre panier.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -86,6 +101,11 @@ final class PanierController extends AbstractController
     #[Route('/panier/moins/{id}', name: 'app_panier_moins')]
     public function moins(int $id): RedirectResponse
     {
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez vous connecter pour modifier votre panier.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -105,6 +125,11 @@ final class PanierController extends AbstractController
     #[Route('/panier/supprimer/{id}', name: 'app_panier_supprimer')]
     public function supprimer(int $id): RedirectResponse
     {
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez vous connecter pour modifier votre panier.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $session = $this->requestStack->getSession();
         $panier = $session->get('panier', []);
 
@@ -122,6 +147,11 @@ final class PanierController extends AbstractController
     #[Route('/panier/vider', name: 'app_panier_vider')]
     public function vider(): RedirectResponse
     {
+        if (!$this->getUser()) {
+            $this->addFlash('warning', 'Vous devez vous connecter pour vider votre panier.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $session = $this->requestStack->getSession();
         $session->remove('panier');
 
