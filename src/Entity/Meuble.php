@@ -6,6 +6,7 @@ use App\Repository\MeubleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MeubleRepository::class)]
 class Meuble
@@ -25,6 +26,9 @@ class Meuble
     private ?string $prix = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le stock est requis.')]
+    #[Assert\Type(type: 'integer', message: 'Le stock doit être un nombre entier.')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le stock doit être positif ou nul.')]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255, nullable: true)]

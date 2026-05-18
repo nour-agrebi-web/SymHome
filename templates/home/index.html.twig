@@ -212,8 +212,12 @@
                                 {{ meuble.prix }} DT
                             </p>
 
-                            {% if meuble.stock > 0 %}
+                            {% if meuble.stock >= 10 %}
                                 <span class="badge bg-success">En stock: {{ meuble.stock }}</span>
+                            {% elseif meuble.stock >= 6 %}
+                                <span class="badge bg-warning text-dark">En stock: {{ meuble.stock }}</span>
+                            {% elseif meuble.stock > 0 %}
+                                <span class="badge bg-danger">En stock: {{ meuble.stock }}</span>
                             {% else %}
                                 <span class="badge bg-danger">Rupture de stock</span>
                             {% endif %}

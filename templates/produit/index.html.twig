@@ -328,9 +328,23 @@
                                 {{ meuble.prix|number_format(2, '.', ' ') }} DT
                             </div>
 
-                            <span class="stock-badge">
-                                En stock : {{ meuble.stock }}
-                            </span>
+                            {% if meuble.stock >= 10 %}
+                                <span class="stock-badge bg-success text-white">
+                                    En stock : {{ meuble.stock }}
+                                </span>
+                            {% elseif meuble.stock >= 6 %}
+                                <span class="stock-badge bg-warning text-dark">
+                                    En stock : {{ meuble.stock }}
+                                </span>
+                            {% elseif meuble.stock > 0 %}
+                                <span class="stock-badge bg-danger text-white">
+                                    En stock : {{ meuble.stock }}
+                                </span>
+                            {% else %}
+                                <span class="stock-badge bg-danger text-white">
+                                    Rupture de stock
+                                </span>
+                            {% endif %}
                         </div>
 
                         <div class="product-footer">

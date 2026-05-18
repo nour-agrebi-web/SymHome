@@ -52,7 +52,17 @@
                             </tr>
                             <tr>
                                 <th>Stock disponible</th>
-                                <td>{{ meuble.stock }}</td>
+                                <td>
+                                    {% if meuble.stock >= 10 %}
+                                        <span class="badge bg-success">{{ meuble.stock }}</span>
+                                    {% elseif meuble.stock >= 6 %}
+                                        <span class="badge bg-warning text-dark">{{ meuble.stock }}</span>
+                                    {% elseif meuble.stock > 0 %}
+                                        <span class="badge bg-danger">{{ meuble.stock }}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Rupture</span>
+                                    {% endif %}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Catégorie</th>

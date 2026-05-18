@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class MeubleType extends AbstractType
 {
@@ -46,8 +47,23 @@ class MeubleType extends AbstractType
                 'label' => 'Stock disponible',
                 'attr' => [
                     'class' => 'form-control',
+                    'type' => 'number',
                     'min' => 0,
+                    'step' => 1,
                     'placeholder' => 'Ex: 10',
+                ],
+                'constraints' => [
+                    new Assert\NotNull([
+                        'message' => 'Le stock est requis.',
+                    ]),
+                    new Assert\Type([
+                        'type' => 'integer',
+                        'message' => 'Le stock doit être un nombre entier.',
+                    ]),
+                    new Assert\GreaterThanOrEqual([
+                        'value' => 0,
+                        'message' => 'Le stock doit être positif ou nul.',
+                    ]),
                 ],
             ])
             ->add('image', TextType::class, [
