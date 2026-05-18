@@ -2,69 +2,203 @@
 
 {% block title %}Mon compte - SymHome{% endblock %}
 
+{% block stylesheets %}
+<style>
+    body {
+        background: #fffdfb;
+    }
+
+    .profile-page {
+        padding: 60px 0;
+    }
+
+    .profile-title {
+        font-size: 46px;
+        font-weight: 900;
+        color: #242424;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .profile-card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #8b5e3c, #5b3a25);
+        color: white;
+        padding: 28px;
+    }
+
+    .profile-header h4 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .profile-body {
+        padding: 34px;
+        background: white;
+    }
+
+    .info-box {
+        background: #f8f8f8;
+        border-radius: 14px;
+        padding: 20px;
+        height: 100%;
+    }
+
+    .info-box small {
+        color: #6c757d;
+        font-size: 15px;
+    }
+
+    .info-box div {
+        font-size: 22px;
+        font-weight: 900;
+        color: #111;
+        margin-top: 8px;
+    }
+
+    .profile-actions {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .btn-symhome {
+        background: #8b5e3c;
+        color: white;
+        border: none;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 11px 18px;
+    }
+
+    .btn-symhome:hover {
+        background: #70482d;
+        color: white;
+    }
+
+    .btn-outline-symhome {
+        border: 1px solid #8b5e3c;
+        color: #8b5e3c;
+        background: white;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 11px 18px;
+    }
+
+    .btn-outline-symhome:hover {
+        background: #8b5e3c;
+        color: white;
+    }
+
+    .btn-delete {
+        border-radius: 10px;
+        padding: 11px 18px;
+        font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+        .profile-title {
+            font-size: 34px;
+        }
+
+        .profile-actions {
+            flex-direction: column;
+        }
+
+        .profile-actions a,
+        .profile-actions button,
+        .profile-actions form {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<div class="container profile-page">
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
 
     <div class="row justify-content-center">
         <div class="col-lg-9">
 
-            <div class="mb-4">
-                <h1 class="fw-bold text-center mb-4">Espace Comptes</h1>
-                
-            </div>
+            <h1 class="profile-title">Espace Compte</h1>
 
-            <div class="card shadow-sm border-0 overflow-hidden">
-                <div class="card-header text-white py-4" style="background: linear-gradient(135deg, #8b5e3c, #5b3a25);">
-                    <h4 class="mb-0">Informations personnelles</h4>
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h4>Informations personnelles</h4>
                 </div>
 
-                <div class="card-body p-4">
+                <div class="profile-body">
 
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 h-100">
-                                <small class="text-muted">Nom</small>
-                                <div class="fw-bold fs-5">
-                                    {{ app.user.nom }}
-                                </div>
+                            <div class="info-box">
+                                <small>Nom</small>
+                                <div>{{ app.user.nom }}</div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 h-100">
-                                <small class="text-muted">Prénom</small>
-                                <div class="fw-bold fs-5">
-                                    {{ app.user.prenom }}
-                                </div>
+                            <div class="info-box">
+                                <small>Prénom</small>
+                                <div>{{ app.user.prenom }}</div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 h-100">
-                                <small class="text-muted">Email</small>
-                                <div class="fw-bold fs-5">
-                                    {{ app.user.email }}
-                                </div>
+                            <div class="info-box">
+                                <small>Email</small>
+                                <div>{{ app.user.email }}</div>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 h-100">
-                                <small class="text-muted">Téléphone</small>
-                                <div class="fw-bold fs-5">
-                                    {{ app.user.telephone ?: '-' }}
-                                </div>
+                            <div class="info-box">
+                                <small>Téléphone</small>
+                                <div>{{ app.user.telephone ?: '-' }}</div>
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted">Adresse</small>
-                                <div class="fw-bold fs-5">
-                                    {{ app.user.adresse ?: '-' }}
-                                </div>
+                            <div class="info-box">
+                                <small>Adresse</small>
+                                <div>{{ app.user.adresse ?: '-' }}</div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <a href="{{ path('app_profile_edit') }}" class="btn btn-symhome">
+                            Modifier mes informations
+                        </a>
+
+                        <a href="{{ path('app_profile_password') }}" class="btn btn-outline-symhome">
+                            Changer mot de passe
+                        </a>
+
+                        <form method="post"
+                              action="{{ path('app_profile_delete') }}"
+                              onsubmit="return confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est définitive.');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
+                            <button type="submit" class="btn btn-danger btn-delete">
+                                Supprimer mon compte
+                            </button>
+                        </form>
                     </div>
 
                 </div>
@@ -74,7 +208,4 @@
     </div>
 
 </div>
-<style>
-  
-</style>
 {% endblock %}
