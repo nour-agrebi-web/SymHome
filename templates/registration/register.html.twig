@@ -2,72 +2,194 @@
 
 {% block title %}Créer un compte - SymHome{% endblock %}
 
+{% block stylesheets %}
+<style>
+    body {
+        background: #f7f4f0;
+    }
+
+    .register-section {
+        min-height: calc(100vh - 104px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 55px 20px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 900px;
+        background: #ffffff;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 18px 45px rgba(57, 46, 44, 0.16);
+    }
+
+    .register-header {
+        background: #392e2c;
+        color: #ffffff;
+        padding: 28px 34px;
+    }
+
+    .register-header h4 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 900;
+    }
+
+    .register-header p {
+        margin: 8px 0 0;
+        color: #ffffffcc;
+        font-size: 15px;
+    }
+
+    .register-body {
+        padding: 34px;
+    }
+
+    .form-label {
+        color: #392e2c;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        height: 48px;
+        border-radius: 12px;
+        border: 1px solid #ddd5cf;
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+
+    textarea.form-control {
+        height: 110px;
+        resize: none;
+    }
+
+    .form-control:focus {
+        border-color: #8a5a3c;
+        box-shadow: 0 0 0 0.2rem rgba(138, 90, 60, 0.18);
+    }
+
+    .register-btn {
+        width: 100%;
+        border: none;
+        border-radius: 14px;
+        background: #392e2c;
+        color: white;
+        padding: 14px;
+        font-size: 17px;
+        font-weight: 800;
+        margin-top: 12px;
+        transition: 0.2s ease;
+    }
+
+    .register-btn:hover {
+        background: #5a4039;
+        transform: translateY(-1px);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 22px;
+        color: #6c625f;
+        font-weight: 600;
+    }
+
+    .login-link a {
+        color: #392e2c;
+        font-weight: 900;
+        text-decoration: none;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    .alert-danger {
+        border-radius: 14px;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .register-section {
+            padding: 35px 14px;
+        }
+
+        .register-header {
+            padding: 24px;
+        }
+
+        .register-header h4 {
+            font-size: 25px;
+        }
+
+        .register-body {
+            padding: 24px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="container mt-5">
+<section class="register-section">
+    <div class="register-card">
 
-    <div class="row justify-content-center">
-        <div class="col-md-7">
+        <div class="register-header">
+            <h4>Créer un compte client</h4>
+            <p>Inscrivez-vous pour commander vos meubles préférés.</p>
+        </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Créer un compte client</h4>
-                </div>
+        <div class="register-body">
 
-                <div class="card-body">
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
 
-                    {% for message in app.flashes('danger') %}
-                        <div class="alert alert-danger">{{ message }}</div>
-                    {% endfor %}
-
-                    <form method="post">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nom</label>
-                                <input type="text" name="nom" class="form-control" required>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Prénom</label>
-                                <input type="text" name="prenom" class="form-control" required>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Téléphone</label>
-                            <input type="text" name="telephone" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Adresse</label>
-                            <textarea name="adresse" class="form-control" rows="3"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Mot de passe</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
-
-                        <button class="btn btn-success w-100">
-                            Créer mon compte
-                        </button>
-                    </form>
-
-                    <div class="text-center mt-3">
-                        <a href="{{ path('app_login') }}">
-                            J'ai déjà un compte
-                        </a>
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" name="nom" class="form-control" required>
                     </div>
 
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Prénom</label>
+                        <input type="text" name="prenom" class="form-control" required>
+                    </div>
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Téléphone</label>
+                    <input type="text" name="telephone" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Adresse</label>
+                    <textarea name="adresse" class="form-control"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="register-btn">
+                    Créer mon compte
+                </button>
+            </form>
+
+            <div class="login-link">
+                Vous avez déjà un compte ?
+                <a href="{{ path('app_login') }}">Se connecter</a>
             </div>
 
         </div>
     </div>
-
-</div>
+</section>
 {% endblock %}
