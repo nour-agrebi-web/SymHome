@@ -221,6 +221,27 @@
             width: 100%;
         }
     }
+    .symhome-pagination .page-link {
+    color: #8b5e3c;
+    border: 1px solid #eadfd5;
+    font-weight: 700;
+    border-radius: 10px;
+    margin: 0 4px;
+    padding: 9px 14px;
+}
+.symhome-pagination .page-link:hover {
+    background: #f3eee8;
+    color: #70482d;
+}
+.symhome-pagination .page-item.active .page-link {
+     background: #8b5e3c;
+    border-color: #8b5e3c;
+    color: white;
+}
+.symhome-pagination .page-item.disabled .page-link {
+    color: #aaa;
+    background: #f8f8f8;
+}
 </style>
 {% endblock %}
 
@@ -333,6 +354,44 @@
             {% endfor %}
         </div>
     {% endif %}
+    {% if totalPages > 1 %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center symhome-pagination">
+            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ path('app_produit_index', {
+                       page: page - 1,
+                       search: search,
+                       categorie: categorieId
+                   }) }}">
+                    Precedent
+                </a>
+            </li>
+            {% for i in 1..totalPages %}
+                <li class="page-item {% if page == i %}active{% endif %}">
+                    <a class="page-link"
+                       href="{{ path('app_produit_index', {
+                           page: i,
+                           search: search,
+                           categorie: categorieId
+                       }) }}">
+                        {{ i }}
+                    </a>
+                </li>
+            {% endfor %}
+            <li class="page-item {% if page == totalPages %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ path('app_produit_index', {
+                       page: page + 1,
+                       search: search,
+                       categorie: categorieId
+                   }) }}">
+                    Suivant
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}
 
 </div>
 {% endblock %}

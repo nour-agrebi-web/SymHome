@@ -13,42 +13,55 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProduitController extends AbstractController
 {
     #[Route('/produits', name: 'app_produit_index')]
-    public function index(
-        Request $request,
-        MeubleRepository $meubleRepository,
-        CategorieRepository $categorieRepository
-    ): Response {
-        $search = $request->query->get('search');
-        $categorieId = $request->query->get('categorie');
-
-        $queryBuilder = $meubleRepository->createQueryBuilder('m')
-            ->leftJoin('m.categorie', 'c')
-            ->addSelect('c');
-
-        if ($search) {
-            $queryBuilder
-                ->andWhere('m.nom LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
-        }
-
-        if ($categorieId) {
-            $queryBuilder
-                ->andWhere('c.id = :categorieId')
-                ->setParameter('categorieId', $categorieId);
-        }
-
-        $meubles = $queryBuilder
-            ->orderBy('m.id', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        return $this->render('produit/index.html.twig', [
-            'meubles' => $meubles,
-            'categories' => $categorieRepository->findAll(),
-            'search' => $search,
-            'categorieId' => $categorieId,
-        ]);
+public function index(
+    Request $request,
+    MeubleRepository $meubleRepository,
+    CategorieRepository $categorieRepository
+): Response {
+    $search = $request->query->get('search');
+    $categorieId = $request->query->get('categorie');
+    // Page courante depuis l'URL: /produits?page=2
+    $page = max(1, $request->query->getInt('page', 1));
+    // Nombre de produits par page
+    $limit = 6;
+    // Position de depart dans la liste
+    $offset = ($page - 1) * $limit;
+    $queryBuilder = $meubleRepository->createQueryBuilder('m')
+        ->leftJoin('m.categorie', 'c')
+        ->addSelect('c');
+    if ($search) {
+        $queryBuilder
+            ->andWhere('m.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
     }
+    if ($categorieId) {
+        $queryBuilder
+            ->andWhere('c.id = :categorieId')
+            ->setParameter('categorieId', $categorieId);
+    }
+    // Calculer le nombre total de produits apres recherche/filtre
+    $countQueryBuilder = clone $queryBuilder;
+    $totalProduits = (int) $countQueryBuilder
+        ->select('COUNT(m.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    // Recuperer seulement les produits de la page actuelle
+    $meubles = $queryBuilder
+        ->orderBy('m.id', 'DESC')
+        ->setFirstResult($offset)
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult();
+    $totalPages = (int) ceil($totalProduits / $limit);
+    return $this->render('produit/index.html.twig', [
+        'meubles' => $meubles,
+        'categories' => $categorieRepository->findAll(),
+        'search' => $search,
+        'categorieId' => $categorieId,
+        'page' => $page,
+        'totalPages' => $totalPages,
+    ]);
+}
 
     #[Route('/produit/{id}', name: 'app_produit_show')]
     public function show(Meuble $meuble): Response

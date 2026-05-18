@@ -36,8 +36,24 @@ final class HomeController extends AbstractController
                 ->setParameter('categorieId', $categorieId);
         }
 
+        // Page courante depuis l'URL: /?page=2
+        $page = max(1, $request->query->getInt('page', 1));
+        // Nombre de produits par page
+        $limit = 6;
+        // Position de depart dans la liste
+        $offset = ($page - 1) * $limit;
+
+        // Calculer le nombre total de produits apres recherche/filtre
+        $countQueryBuilder = clone $queryBuilder;
+        $totalProduits = (int) $countQueryBuilder
+            ->select('COUNT(m.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
         $meubles = $queryBuilder
             ->orderBy('m.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
 
@@ -46,6 +62,8 @@ final class HomeController extends AbstractController
             'categories' => $categorieRepository->findAll(),
             'search' => $search,
             'categorieId' => $categorieId,
+            'page' => $page,
+            'totalPages' => (int) ceil($totalProduits / $limit),
         ]);
     }
 }

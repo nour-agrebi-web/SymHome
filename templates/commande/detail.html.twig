@@ -5,12 +5,17 @@
 {% block body %}
 <div class="container mt-5">
 
-    <a href="{{ path('app_commande_historique') }}" class="btn btn-outline-secondary mb-4">
-        Retour aux commandes
-    </a>
+   
+
+    <style>
+        .card-header-symhome{ background:#8b5e3c; color:#fff; padding:14px 18px; border-top-left-radius:12px; border-top-right-radius:12px }
+        .btn-symhome{ background:#8b5e3c; color:#fff; border:none; padding:8px 12px; border-radius:10px; font-weight:700 }
+        .btn-outline-symhome{ border:1px solid #8b5e3c; color:#8b5e3c; background:transparent; padding:7px 12px; border-radius:10px; font-weight:700 }
+        .card{ border-radius:12px }
+    </style>
 
     <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header card-header-symhome">
             <h4 class="mb-0">Détail commande {{ commande.numero }}</h4>
         </div>
 
@@ -33,12 +38,13 @@
                             <span class="badge bg-danger">Non payée</span>
                         {% endif %}
                     </p>
+                    
                 </div>
             </div>
 
-            <h4 class="mb-3">Produits</h4>
+            {# <h4 class="mb-3">Produits</h4> #}
 
-            <table class="table table-hover align-middle">
+            {# <table class="table table-hover align-middle">
                 <thead class="table-dark">
                     <tr>
                         <th>Produit</th>
@@ -73,9 +79,13 @@
                         <th>{{ commande.total }} DT</th>
                     </tr>
                 </tfoot>
-            </table>
+            </table> #}
         </div>
     </div>
+    <br>
+     <a href="{{ path('app_commande_historique') }}" class="btn btn-outline-secondary mb-4">
+        Retour aux commandes
+    </a>
 
 </div>
 {% endblock %}

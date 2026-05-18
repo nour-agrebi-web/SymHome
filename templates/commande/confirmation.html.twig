@@ -4,16 +4,20 @@
 
 {% block body %}
 <div class="container mt-5">
+    <style>
+        .alert-success.symhome { background:#f3eee8; color:#70482d; border:1px solid #eadfd5; border-radius:12px; padding:18px }
+        .card-header-symhome{ background:#8b5e3c; color:#fff; padding:14px 18px; border-top-left-radius:12px; border-top-right-radius:12px }
+        .btn-symhome{ background:#8b5e3c; color:#fff; border:none; padding:8px 12px; border-radius:10px; font-weight:700 }
+        .btn-outline-symhome{ border:1px solid #8b5e3c; color:#8b5e3c; background:transparent; padding:7px 12px; border-radius:10px; font-weight:700 }
+    </style>
 
-    <div class="alert alert-success shadow-sm">
+    <div class="alert alert-success symhome shadow-sm">
         <h1 class="fw-bold">Commande confirmée</h1>
-        <p class="mb-0">
-            Votre commande a été validée avec succès.
-        </p>
+        <p class="mb-0">Votre commande a été validée avec succès.</p>
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header card-header-symhome">
             Récapitulatif de la commande
         </div>
 
@@ -85,11 +89,11 @@
             </table>
 
             <div class="d-flex gap-2 mt-4">
-                <a href="{{ path('app_home') }}" class="btn btn-primary">
+                <a href="{{ path('app_home') }}" class="btn-symhome">
                     Retour à l'accueil
                 </a>
 
-                <a href="{{ path('app_commande_historique') }}" class="btn btn-outline-dark">
+                <a href="{{ path('app_commande_historique') }}" class="btn-outline-symhome">
                     Mes commandes
                 </a>
             </div>

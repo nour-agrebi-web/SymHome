@@ -6,7 +6,27 @@
 <div class="container mt-5">
     <h1>Commandes</h1>
 
-    <a href="{{ path('app_commande_historique') }}" class="btn btn-primary">
+    <style>
+        .btn-symhome {
+            background: #8b5e3c;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        .btn-symhome:hover { background: #70482d; color: #fff; }
+        .btn-outline-symhome {
+            border: 1px solid #8b5e3c;
+            color: #8b5e3c;
+            background: transparent;
+            padding: 7px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+    </style>
+
+    <a href="{{ path('app_commande_historique') }}" class="btn-symhome">
         Voir mes commandes
     </a>
 </div>
