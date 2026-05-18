@@ -1,24 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - SymHome{% endblock %}
+{% block title %}Nos produits - SymHome{% endblock %}
 
 {% block stylesheets %}
 <style>
-    .home-hero {
-        background: linear-gradient(135deg, #f7f1eb, #ffffff);
-        border-radius: 26px;
-        padding: 70px 60px;
-        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
-        border: 1px solid #f0e6dc;
+    body {
+        background: #fff;
     }
 
-    .home-hero h1 {
+    .products-header {
+        margin-bottom: 30px;
+    }
+
+    .products-header h1 {
         color: #2b2118;
         font-size: 48px;
         font-weight: 900;
+        margin-bottom: 10px;
     }
 
-    .home-hero p {
+    .products-header p {
         color: #6f6257;
         font-size: 20px;
         max-width: 760px;
@@ -90,75 +91,31 @@
     }
 
     @media (max-width: 768px) {
-        .home-hero {
-            padding: 45px 30px;
-        }
-
-        .home-hero h1 {
+        .products-header h1 {
             font-size: 34px;
         }
 
-        .home-hero p {
+        .products-header p {
             font-size: 17px;
         }
     }
-    .home-hero-image {
-    min-height: 480px;
-    border-radius: 28px;
-    overflow: hidden;
-    background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.12)),
-        url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80');
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.16);
-    display: flex;
-    align-items: center;
-}
-.home-hero-overlay {
-    padding: 70px;
-    max-width: 800px;
-    color: white;
-}
-.home-hero-overlay h1 {
-    font-size: 58px;
-    font-weight: 900;
-    margin-bottom: 18px;
-    color: white;
-    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
-}
-
-.home-hero-overlay p {
-    font-size: 23px;
-    margin: 0;
-    max-width: 720px;
-    color: white;
-    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
-}
-    
 </style>
 {% endblock %}
 
 {% block body %}
 <div class="container mt-5">
 
-    <div class="home-hero-image mb-5">
-    <div class="home-hero-overlay">
-        <h1>Bienvenue chez Maisons du Monde</h1>
+    <div class="products-header">
+        <h1>Nos produits</h1>
         <p>
-            Découvrez notre collection de meubles et décoration pour votre maison.
+            Découvrez tous les meubles disponibles chez SymHome.
         </p>
     </div>
-</div>
 
     <section id="produits">
-        <div class="mb-4">
-            <h2 class="section-title">Découvrez nos best-meubles du moment</h2>
-        </div>
-
         <div class="card filter-card mb-4">
             <div class="card-body">
-                <form method="get" action="{{ path('app_home') }}" class="row g-3 align-items-end">
+                <form method="get" action="{{ path('app_produit_index') }}" class="row g-3 align-items-end">
                     <div class="col-md-5">
                         <label class="form-label">Recherche par nom</label>
                         <input type="text"
@@ -187,7 +144,7 @@
                             Rechercher
                         </button>
 
-                        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                        <a href="{{ path('app_produit_index') }}" class="btn btn-outline-secondary">
                             Reset
                         </a>
                     </div>
@@ -244,9 +201,15 @@
                                 Voir détail
                             </a>
 
-                            <a href="{{ path('app_panier_ajouter', {'id': meuble.id}) }}" class="btn btn-sm btn-symhome">
-                                Ajouter au panier
-                            </a>
+                            {% if app.user %}
+                                <a href="{{ path('app_panier_ajouter', {'id': meuble.id}) }}" class="btn btn-sm btn-symhome">
+                                    Ajouter au panier
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-sm btn-symhome">
+                                    Ajouter au panier
+                                </a>
+                            {% endif %}
                         </div>
 
                     </div>

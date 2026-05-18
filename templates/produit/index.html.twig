@@ -1,118 +1,338 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Produits - SymHome{% endblock %}
+{% block title %}Nos produits - SymHome{% endblock %}
+
+{% block stylesheets %}
+<style>
+    body {
+        background: #fffdfb;
+    }
+
+    .products-page {
+        padding: 55px 0 70px;
+    }
+
+    .products-title {
+        font-size: 44px;
+        font-weight: 900;
+        color: #241915;
+        margin-bottom: 8px;
+    }
+
+    .products-subtitle {
+        color: #6d625e;
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+    .filter-box {
+        background: #ffffff;
+        border: 1px solid #eadfd8;
+        border-radius: 22px;
+        padding: 22px;
+        box-shadow: 0 16px 35px rgba(57, 46, 44, 0.08);
+        margin-bottom: 35px;
+    }
+
+    .filter-box label {
+        color: #392e2c;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .filter-box .form-control,
+    .filter-box .form-select {
+        height: 48px;
+        border-radius: 12px;
+        border: 1px solid #ddd5cf;
+        font-size: 15px;
+    }
+
+    .filter-box .form-control:focus,
+    .filter-box .form-select:focus {
+        border-color: #9a6740;
+        box-shadow: 0 0 0 0.2rem rgba(154, 103, 64, 0.18);
+    }
+
+    .btn-search {
+        background: #9a6740;
+        color: white;
+        border: none;
+        height: 48px;
+        border-radius: 12px;
+        font-weight: 800;
+        width: 100%;
+    }
+
+    .btn-search:hover {
+        background: #7c4f2f;
+        color: white;
+    }
+
+    .btn-reset {
+        height: 48px;
+        border-radius: 12px;
+        border: 1px solid #9a6740;
+        color: #9a6740;
+        background: white;
+        font-weight: 700;
+        width: 100%;
+    }
+
+    .btn-reset:hover {
+        background: #9a6740;
+        color: white;
+    }
+
+    .product-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 14px 35px rgba(57, 46, 44, 0.10);
+        transition: 0.25s ease;
+        height: 100%;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 22px 45px rgba(57, 46, 44, 0.16);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 270px;
+        object-fit: cover;
+    }
+
+    .product-body {
+        padding: 22px;
+    }
+
+    .category-badge {
+        display: inline-block;
+        background: #f4eee8;
+        color: #8a5a3c;
+        padding: 5px 12px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .product-name {
+        font-size: 24px;
+        font-weight: 900;
+        color: #1f1f1f;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        color: #6d625e;
+        font-size: 15px;
+        min-height: 48px;
+        margin-bottom: 18px;
+    }
+
+    .product-price {
+        color: #9a6740;
+        font-size: 24px;
+        font-weight: 900;
+        margin-bottom: 14px;
+    }
+
+    .stock-badge {
+        display: inline-block;
+        background: #198754;
+        color: white;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .product-footer {
+        border-top: 1px solid #eee5df;
+        padding: 16px 22px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .btn-detail {
+        border: 1px solid #9a6740;
+        color: #9a6740;
+        background: white;
+        border-radius: 10px;
+        padding: 9px 14px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .btn-detail:hover {
+        background: #9a6740;
+        color: white;
+    }
+
+    .btn-cart {
+        background: #9a6740;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-weight: 800;
+        text-decoration: none;
+        border: none;
+    }
+
+    .btn-cart:hover {
+        background: #7c4f2f;
+        color: white;
+    }
+
+    .empty-products {
+        background: #fff;
+        border: 1px solid #eadfd8;
+        border-radius: 20px;
+        padding: 35px;
+        text-align: center;
+        color: #6d625e;
+        box-shadow: 0 12px 30px rgba(57, 46, 44, 0.08);
+    }
+
+    @media (max-width: 768px) {
+        .products-title {
+            font-size: 34px;
+        }
+
+        .product-image {
+            height: 220px;
+        }
+
+        .product-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-detail,
+        .btn-cart {
+            text-align: center;
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
+<div class="container products-page">
 
-    <h1 class="fw-bold mb-2">Nos produits</h1>
-    <p class="text-muted mb-4">Découvrez tous les meubles disponibles chez SymHome.</p>
+    <h1 class="products-title">Nos produits</h1>
+    <p class="products-subtitle">
+        Découvrez tous les meubles disponibles chez SymHome.
+    </p>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="get" action="{{ path('app_produit_index') }}" class="row g-3 align-items-end">
-                <div class="col-md-5">
-                    <label class="form-label">Recherche par nom</label>
-                    <input type="text"
-                           name="search"
-                           value="{{ search }}"
-                           class="form-control"
-                           placeholder="Ex: canapé, chaise, bureau...">
-                </div>
+    <form method="get" class="filter-box">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label>Recherche par nom</label>
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="form-control" 
+                    placeholder="Ex: canapé, chaise, bureau..."
+                    value="{{ search ?? '' }}"
+                >
+            </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Catégorie</label>
-                    <select name="categorie" class="form-select">
-                        <option value="">Toutes les catégories</option>
+            <div class="col-md-4">
+                <label>Catégorie</label>
+                <select name="categorie" class="form-select">
+                    <option value="">Toutes les catégories</option>
 
-                        {% for categorie in categories %}
-                            <option value="{{ categorie.id }}"
-                                {% if categorieId == categorie.id %}selected{% endif %}>
-                                {{ categorie.nom }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+                    {% for categorie in categories %}
+                        <option value="{{ categorie.id }}" {% if categorieId is defined and categorieId == categorie.id %}selected{% endif %}>
+                            {{ categorie.nom }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                <div class="col-md-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        Rechercher
-                    </button>
+            <div class="col-md-2">
+                <button type="submit" class="btn-search">
+                    Rechercher
+                </button>
+            </div>
 
-                    <a href="{{ path('app_produit_index') }}" class="btn btn-outline-secondary">
-                        Reset
-                    </a>
-                </div>
-            </form>
+            <div class="col-md-1">
+                <a href="{{ path('app_produit_index') }}" class="btn-reset">
+                    Reset
+                </a>
+            </div>
         </div>
-    </div>
+    </form>
 
-    <div class="row">
-        {% for meuble in meubles %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
+    {% if meubles is empty %}
+        <div class="empty-products">
+            <h4>Aucun produit trouvé</h4>
+            <p class="mb-0">Essayez une autre recherche ou une autre catégorie.</p>
+        </div>
+    {% else %}
+        <div class="row g-4">
+            {% for meuble in meubles %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="product-card">
 
-                    {% if meuble.image %}
-                        <img src="{{ asset('uploads/meubles/' ~ meuble.image) }}"
-                             class="card-img-top"
-                             alt="{{ meuble.nom }}"
-                             style="height: 220px; object-fit: cover;">
-                    {% else %}
-                        <div class="bg-light d-flex align-items-center justify-content-center"
-                             style="height: 220px;">
-                            <span class="text-muted">Aucune image</span>
-                        </div>
-                    {% endif %}
-
-                    <div class="card-body">
-                        {% if meuble.categorie %}
-                            <span class="badge bg-secondary mb-2">
-                                {{ meuble.categorie.nom }}
-                            </span>
+                        {% if meuble.image %}
+                            <img src="{{ asset('uploads/meubles/' ~ meuble.image) }}" class="product-image" alt="{{ meuble.nom }}">
+                        {% else %}
+                            <img src="{{ asset('images/no-image.jpg') }}" class="product-image" alt="{{ meuble.nom }}">
                         {% endif %}
 
-                        <h5 class="card-title">{{ meuble.nom }}</h5>
+                        <div class="product-body">
+                            {% if meuble.categorie %}
+                                <span class="category-badge">
+                                    {{ meuble.categorie.nom }}
+                                </span>
+                            {% endif %}
 
-                        <p class="card-text text-muted">
-                            {% if meuble.description %}
+                            <h3 class="product-name">{{ meuble.nom }}</h3>
+
+                            <p class="product-description">
                                 {{ meuble.description|slice(0, 80) }}
                                 {% if meuble.description|length > 80 %}...{% endif %}
+                            </p>
+
+                            <div class="product-price">
+                                {{ meuble.prix|number_format(2, '.', ' ') }} DT
+                            </div>
+
+                            <span class="stock-badge">
+                                En stock : {{ meuble.stock }}
+                            </span>
+                        </div>
+
+                        <div class="product-footer">
+                            <a href="{{ path('app_produit_show', {'id': meuble.id}) }}" class="btn-detail">
+                                Voir détail
+                            </a>
+
+                            {% if app.user %}
+                                <a href="{{ path('app_panier_ajouter', {'id': meuble.id}) }}" class="btn-cart">
+                                    Ajouter au panier
+                                </a>
                             {% else %}
-                                Aucune description
+                                <a href="{{ path('app_login') }}" class="btn-cart">
+                                    Ajouter au panier
+                                </a>
                             {% endif %}
-                        </p>
+                        </div>
 
-                        <p class="fw-bold text-primary fs-5">
-                            {{ meuble.prix }} DT
-                        </p>
-
-                        {% if meuble.stock > 0 %}
-                            <span class="badge bg-success">En stock: {{ meuble.stock }}</span>
-                        {% else %}
-                            <span class="badge bg-danger">Rupture de stock</span>
-                        {% endif %}
                     </div>
-
-                    <div class="card-footer bg-white d-flex justify-content-between">
-                        <a href="{{ path('app_produit_show', {'id': meuble.id}) }}" class="btn btn-sm btn-outline-primary">
-                            Voir détail
-                        </a>
-
-                        <a href="{{ path('app_panier_ajouter', {'id': meuble.id}) }}" class="btn btn-sm btn-success">
-                            Ajouter au panier
-                        </a>
-                    </div>
-
                 </div>
-            </div>
-        {% else %}
-            <div class="col-12">
-                <div class="alert alert-warning">
-                    Aucun produit trouvé.
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
 </div>
 {% endblock %}
