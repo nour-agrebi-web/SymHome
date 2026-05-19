@@ -108,6 +108,35 @@
             .auth-link i {
                 font-size: 22px;
             }
+
+            .site-footer {
+                background: #392e2c;
+                color: #f5f1ee;
+                padding: 24px 0;
+                font-size: 14px;
+            }
+
+            .site-footer .footer-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .site-footer .footer-brand {
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
+
+            .site-footer .footer-contact a {
+                color: #f5f1ee;
+                text-decoration: none;
+            }
+
+            .site-footer .footer-contact a:hover {
+                text-decoration: underline;
+            }
         </style>
 
         {% block stylesheets %}{% endblock %}
@@ -118,8 +147,8 @@
             <nav class="navbar navbar-expand-lg navbar-dark main-navbar">
                 <div class="container">
                     <a class="brand-logo" href="{{ path('app_home') }}">
-                        MAISONS
-                        <span>DU MONDE</span>
+                        SymHome
+                        <span>Décoration & Mobilier</span>
                     </a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSymHome" aria-controls="navbarSymHome" aria-expanded="false" aria-label="Toggle navigation">
@@ -206,6 +235,20 @@
         {% endblock %}
 
         {% block body %}{% endblock %}
+
+        <footer class="site-footer">
+            <div class="container footer-container">
+                <div class="footer-brand">SymHome</div>
+                <div class="footer-contact">
+                    <div>Contactez-nous :</div>
+                    <div>
+                        <a href="mailto:symhome@decor.tn">symhome@decor.tn</a>
+                        &nbsp;|&nbsp;
+                        <a href="tel:+21622123456">+216 22 123 456</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         {% block javascripts %}{% endblock %}
