@@ -21,12 +21,12 @@
             <p><strong>Téléphone :</strong> {{ user.telephone ?: '-' }}</p>
             <p><strong>Adresse :</strong> {{ user.adresse ?: '-' }}</p>
 
-            <p>
+            {# <p>
                 <strong>Rôles :</strong>
                 {% for role in user.roles %}
                     <span class="badge bg-secondary">{{ role }}</span>
                 {% endfor %}
-            </p>
+            </p> #}
 
             <form method="post"
                   action="{{ path('app_admin_user_delete', {'id': user.id}) }}"

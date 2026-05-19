@@ -20,7 +20,7 @@
                         <th>ID</th>
                         <th>Client</th>
                         <th>Email</th>
-                        <th>Rôles</th>
+                        {# <th>Rôles</th> #}
                         <th>Téléphone</th>
                         <th>Date création</th>
                         <th class="text-end">Action</th>
@@ -35,11 +35,11 @@
                                 <strong>{{ user.nom }} {{ user.prenom }}</strong>
                             </td>
                             <td>{{ user.email }}</td>
-                            <td>
-                                {% for role in user.roles %}
+                            {# {# <td> #}
+                                {# {% for role in user.roles %}
                                     <span class="badge bg-secondary">{{ role }}</span>
                                 {% endfor %}
-                            </td>
+                            </td> #}
                             <td>{{ user.telephone ?: '-' }}</td>
                             <td>
                                 {% if user.createdAt %}
