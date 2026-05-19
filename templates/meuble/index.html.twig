@@ -89,13 +89,25 @@
                         </td>
 
                         <td class="text-end">
-                            <a href="{{ path('app_meuble_show', {'id': meuble.id}) }}" class="btn btn-sm btn-info text-white">
-                                Voir
-                            </a>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ path('app_meuble_show', {'id': meuble.id}) }}" class="btn btn-sm btn-info text-white">
+                                    Voir
+                                </a>
 
-                            <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}" class="btn btn-sm btn-warning">
-                                Modifier
-                            </a>
+                                <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}" class="btn btn-sm btn-warning">
+                                    Modifier
+                                </a>
+
+                                <form method="post"
+                                      action="{{ path('app_meuble_delete', {'id': meuble.id}) }}"
+                                      onsubmit="return confirm('Voulez-vous vraiment supprimer ce meuble ?');"
+                                      class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ meuble.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 {% else %}
@@ -110,6 +122,5 @@
         </div>
     </div>
 
-    
 </div>
 {% endblock %}
