@@ -37,13 +37,15 @@
 
                     <p>
                         <strong>Paiement :</strong>
-                        {% if commande.isPaid %}
+                        {% if commande.etat == 'annulee' %}
+                            <span class="badge bg-secondary">Remboursée</span>
+                        {% elseif commande.isPaid %}
                             <span class="badge bg-success">Payée</span>
                         {% else %}
                             <span class="badge bg-danger">Non payée</span>
                         {% endif %}
                     </p>
-                </div>
+                                    </div>
 
                 <div class="col-md-6">
                     <h5 class="fw-bold mb-3">Client</h5>

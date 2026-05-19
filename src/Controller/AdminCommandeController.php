@@ -33,8 +33,7 @@ final class AdminCommandeController extends AbstractController
             'commande' => $commande,
         ]);
     }
-
-    #[Route('/{id}/etat', name: 'app_admin_commande_etat', methods: ['POST'])]
+#[Route('/{id}/etat', name: 'app_admin_commande_etat', methods: ['POST'])]
     public function changerEtat(
         Request $request,
         Commande $commande,
@@ -49,7 +48,7 @@ final class AdminCommandeController extends AbstractController
 
         $etat = $request->request->get('etat');
 
-            $etatsAutorises = [
+        $etatsAutorises = [
             Commande::ETAT_EN_ATTENTE,
             Commande::ETAT_CONFIRMEE,
             Commande::ETAT_ANNULEE,
@@ -63,9 +62,26 @@ final class AdminCommandeController extends AbstractController
         }
 
         $commande->setEtat($etat);
+
+        // Si la commande est annulée, on considère que le paiement est remboursé.
+        if ($etat === Commande::ETAT_ANNULEE) {
+            $commande->setIsPaid(false);
+            $commande->setModePaiement('remboursement');
+        }
+
+        // Si la commande est confirmée, elle reste payée.
+        if ($etat === Commande::ETAT_CONFIRMEE) {
+            $commande->setIsPaid(true);
+            $commande->setModePaiement('carte_bancaire');
+        }
+
         $entityManager->flush();
 
-        $this->addFlash('success', 'État de la commande modifié avec succès.');
+        if ($etat === Commande::ETAT_ANNULEE) {
+            $this->addFlash('success', 'Commande annulée et paiement remboursé.');
+        } else {
+            $this->addFlash('success', 'État de la commande modifié avec succès.');
+        }
 
         return $this->redirectToRoute('app_admin_commande_show', [
             'id' => $commande->getId(),

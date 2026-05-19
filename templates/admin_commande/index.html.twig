@@ -76,8 +76,10 @@
                                     {% endif %}
                                 </td>
 
-                                <td>
-                                    {% if commande.isPaid %}
+                               <td>
+                                    {% if commande.etat == 'annulee' %}
+                                        <span class="badge bg-secondary">Remboursée</span>
+                                    {% elseif commande.isPaid %}
                                         <span class="badge bg-success">Payée</span>
                                     {% else %}
                                         <span class="badge bg-danger">Non payée</span>
