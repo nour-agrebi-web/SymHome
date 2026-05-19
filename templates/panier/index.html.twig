@@ -2,11 +2,194 @@
 
 {% block title %}Mon panier - SymHome{% endblock %}
 
-{% block body %}
-<div class="container mt-5">
+{% block stylesheets %}
+<style>
+    body {
+        background: #fffdfb;
+    }
 
-    <h1 class="fw-bold mb-2">Mon panier</h1>
-    <p class="text-muted mb-4">Gérez les meubles ajoutés à votre panier.</p>
+    .cart-page {
+        padding: 55px 0 80px;
+    }
+
+    .cart-hero {
+        margin-bottom: 30px;
+    }
+
+    .cart-hero h1 {
+        font-size: 42px;
+        font-weight: 900;
+        color: #241915;
+    }
+
+    .cart-hero p {
+        color: #6d625e;
+        font-size: 18px;
+        max-width: 680px;
+    }
+
+    .cart-card,
+    .summary-card,
+    .empty-card {
+        border: 1px solid #eadfd8;
+        border-radius: 24px;
+        box-shadow: 0 16px 35px rgba(57, 46, 44, 0.08);
+        background: #ffffff;
+    }
+
+    .cart-card .card-body,
+    .summary-card .card-body,
+    .empty-card .card-body {
+        padding: 28px;
+    }
+
+    .cart-table thead th {
+        background: #f4eee8;
+        color: #241915;
+        border-bottom: 2px solid #eadfd8;
+        font-weight: 700;
+    }
+
+    .cart-table tbody tr {
+        border-bottom: 1px solid #f0e8e2;
+    }
+
+    .cart-table td,
+    .cart-table th {
+        vertical-align: middle;
+        border-top: none;
+        padding: 18px 12px;
+    }
+
+    .product-brief {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .product-thumb {
+        width: 90px;
+        height: 75px;
+        object-fit: cover;
+        border-radius: 18px;
+        border: 1px solid #eadfd8;
+    }
+
+    .product-info strong {
+        display: block;
+        font-size: 16px;
+        color: #241915;
+    }
+
+    .product-info small {
+        color: #6d625e;
+    }
+
+    .quantity-controls .btn {
+        min-width: 38px;
+        border-radius: 10px;
+        border-color: #ddd5cf;
+        color: #392e2c;
+    }
+
+    .quantity-controls .btn:hover {
+        background: #f3eee8;
+        border-color: #d2c3b5;
+    }
+
+    .amount-label {
+        font-weight: 700;
+        min-width: 40px;
+        text-align: center;
+    }
+
+    .btn-symhome {
+        background: #8b5e3c;
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 20px;
+        font-weight: 700;
+    }
+
+    .btn-symhome:hover {
+        background: #70482d;
+        color: #ffffff;
+    }
+
+    .btn-outline-symhome {
+        color: #8b5e3c;
+        border-color: #8b5e3c;
+        border-radius: 12px;
+        font-weight: 700;
+    }
+
+    .btn-outline-symhome:hover {
+        background: #8b5e3c;
+        color: #ffffff;
+    }
+
+    .summary-card h2 {
+        font-size: 24px;
+        font-weight: 900;
+        color: #241915;
+        margin-bottom: 8px;
+    }
+
+    .summary-card p {
+        color: #6d625e;
+        margin-bottom: 24px;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        color: #6d625e;
+        margin-bottom: 16px;
+    }
+
+    .summary-item.total {
+        font-size: 22px;
+        font-weight: 900;
+        color: #241915;
+    }
+
+    .summary-actions .btn {
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    .empty-card {
+        text-align: center;
+    }
+
+    .empty-card h3 {
+        font-size: 28px;
+        font-weight: 900;
+        color: #241915;
+        margin-bottom: 16px;
+    }
+
+    .empty-card p {
+        color: #6d625e;
+        margin-bottom: 24px;
+    }
+
+    @media (max-width: 992px) {
+        .summary-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container cart-page">
+
+    <div class="cart-hero">
+        <h1>Mon panier</h1>
+        <p>Retrouvez ici tous les meubles sélectionnés pour votre intérieur, prêts à rejoindre votre maison.</p>
+    </div>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
@@ -15,102 +198,107 @@
     {% endfor %}
 
     {% if items|length > 0 %}
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Produit</th>
-                            <th>Prix</th>
-                            <th>Quantité</th>
-                            <th>Sous-total</th>
-                            <th class="text-end">Action</th>
-                        </tr>
-                    </thead>
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="cart-card">
+                    <div class="card-body p-0">
+                        <table class="table cart-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Prix</th>
+                                    <th>Quantité</th>
+                                    <th>Sous-total</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                    <tr>
+                                        <td>
+                                            <div class="product-brief">
+                                                {% if item.meuble.image %}
+                                                    <img src="{{ asset('uploads/meubles/' ~ item.meuble.image) }}"
+                                                         alt="{{ item.meuble.nom }}"
+                                                         class="product-thumb">
+                                                {% endif %}
 
-                    <tbody>
-                    {% for item in items %}
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-3">
-                                    {% if item.meuble.image %}
-                                        <img src="{{ asset('uploads/meubles/' ~ item.meuble.image) }}"
-                                             alt="{{ item.meuble.nom }}"
-                                             style="width: 70px; height: 55px; object-fit: cover;"
-                                             class="rounded border">
-                                    {% endif %}
+                                                <div class="product-info">
+                                                    <strong>{{ item.meuble.nom }}</strong>
+                                                    <small>{{ item.meuble.categorie.nom }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.meuble.prix }} DT</td>
+                                        <td>
+                                            <div class="d-flex align-items-center quantity-controls">
+                                                <a href="{{ path('app_panier_moins', {'id': item.meuble.id}) }}"
+                                                   class="btn btn-sm btn-outline-secondary">-</a>
+                                                <span class="amount-label">{{ item.quantite }}</span>
+                                                <a href="{{ path('app_panier_plus', {'id': item.meuble.id}) }}"
+                                                   class="btn btn-sm btn-outline-secondary">+</a>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.sousTotal }} DT</td>
+                                        <td class="text-end">
+                                            <a href="{{ path('app_panier_supprimer', {'id': item.meuble.id}) }}"
+                                               class="btn btn-sm btn-outline-danger"
+                                               onclick="return confirm('Supprimer ce produit du panier ?')">
+                                                Supprimer
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-                                    <div>
-                                        <strong>{{ item.meuble.nom }}</strong>
-                                        <br>
-                                        <small class="text-muted">
-                                            {{ item.meuble.categorie.nom }}
-                                        </small>
-                                    </div>
-                                </div>
-                            </td>
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <div class="card-body">
+                        <h2>Récapitulatif</h2>
+                        <p>Vérifiez votre sélection et passez à la confirmation de commande.</p>
 
-                            <td>{{ item.meuble.prix }} DT</td>
+                        <div class="summary-item">
+                            <span>Sous-total</span>
+                            <span>{{ total }} DT</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Livraison estimée</span>
+                            <span>Gratuite</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Total</span>
+                            <span>{{ total }} DT</span>
+                        </div>
 
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <a href="{{ path('app_panier_moins', {'id': item.meuble.id}) }}"
-                                       class="btn btn-sm btn-outline-secondary">-</a>
-
-                                    <span class="fw-bold">{{ item.quantite }}</span>
-
-                                    <a href="{{ path('app_panier_plus', {'id': item.meuble.id}) }}"
-                                       class="btn btn-sm btn-outline-secondary">+</a>
-                                </div>
-                            </td>
-
-                            <td>{{ item.sousTotal }} DT</td>
-
-                            <td class="text-end">
-                                <a href="{{ path('app_panier_supprimer', {'id': item.meuble.id}) }}"
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Supprimer ce produit du panier ?')">
-                                    Supprimer
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-
-                    <tfoot>
-                        <tr>
-                            <th colspan="3" class="text-end">Total</th>
-                            <th>{{ total }} DT</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                </table>
-
-                <div class="d-flex justify-content-between">
-                    <a href="{{ path('app_produit_index') }}" class="btn btn-outline-primary">
-                        Continuer mes achats
-                    </a>
-
-                    <div>
-                        <a href="{{ path('app_panier_vider') }}" class="btn btn-outline-danger">
-                            Vider le panier
-                        </a>
-
-                        <a href="{{ path('app_commande_paiement') }}" class="btn btn-success">
-                            Valider la commande
-                        </a>
+                        <div class="summary-actions">
+                            <a href="{{ path('app_commande_paiement') }}" class="btn btn-symhome mb-2">
+                                Valider la commande
+                            </a>
+                            <a href="{{ path('app_panier_vider') }}" class="btn btn-outline-symhome mb-2">
+                                Vider le panier
+                            </a>
+                            <a href="{{ path('app_produit_index') }}" class="btn btn-outline-secondary">
+                                Continuer mes achats
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     {% else %}
-        <div class="alert alert-info">
-            Votre panier est vide.
+        <div class="empty-card card">
+            <div class="card-body">
+                <h3>Panier vide</h3>
+                <p>Ajoutez des meubles pour créer un intérieur chaleureux et élégant.</p>
+                <a href="{{ path('app_produit_index') }}" class="btn btn-symhome">
+                    Voir les produits
+                </a>
+            </div>
         </div>
-
-        <a href="{{ path('app_produit_index') }}" class="btn btn-primary">
-            Voir les produits
-        </a>
     {% endif %}
 
 </div>
