@@ -30,10 +30,12 @@ final class RegistrationController extends AbstractController
 
             if ($userRepository->findOneBy(['email' => $email])) {
                 $this->addFlash('danger', 'Cet email existe déjà.');
+
                 return $this->redirectToRoute('app_register');
             }
 
             $user = new User();
+
             $user->setNom($nom);
             $user->setPrenom($prenom);
             $user->setEmail($email);

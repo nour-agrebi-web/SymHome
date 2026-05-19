@@ -90,6 +90,7 @@ final class CommandeController extends AbstractController
         }
 
         $commande = new Commande();
+
         $commande->setUser($user);
         $commande->setNumero('CMD-' . date('YmdHis') . '-' . random_int(100, 999));
         $commande->setEtat(Commande::ETAT_EN_ATTENTE);
@@ -110,6 +111,7 @@ final class CommandeController extends AbstractController
             $total += $sousTotal;
 
             $ligneCommande = new LigneCommande();
+
             $ligneCommande->setCommande($commande);
             $ligneCommande->setMeuble($meuble);
             $ligneCommande->setQuantite($quantite);
