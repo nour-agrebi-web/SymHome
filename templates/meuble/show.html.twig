@@ -107,19 +107,7 @@
                         </tbody>
                     </table>
 
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <a href="{{ path('app_meuble_index') }}" class="btn btn-outline-secondary">
-                                Retour
-                            </a>
-
-                            <a href="{{ path('app_meuble_edit', {'id': meuble.id}) }}" class="btn btn-warning">
-                                Modifier
-                            </a>
-                        </div>
-
-                        {{ include('meuble/_delete_form.html.twig') }}
-                    </div>
+                    
                 </div>
             </div>
         </div>
